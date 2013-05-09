@@ -1,15 +1,19 @@
-// seedrandom.js version 2.0.
-// Author: David Bau 4/2/2011
+// seedrandom.js version 2.1.
+// Author: David Bau
+// Date: 2013 Mar 16
 //
 // Defines a method Math.seedrandom() that, when called, substitutes
 // an explicitly seeded RC4-based algorithm for Math.random().  Also
 // supports automatic seeding from local or network sources of entropy.
 //
+// http://davidbau.com/encode/seedrandom.js
+// http://davidbau.com/encode/seedrandom-min.js
+//
 // Usage:
 //
 //   <script src=http://davidbau.com/encode/seedrandom-min.js></script>
 //
-//   Math.seedrandom('yipee'); Sets Math.random to a function that is
+//   Math.seedrandom('yay.');  Sets Math.random to a function that is
 //                             initialized using the given explicit seed.
 //
 //   Math.seedrandom();        Sets Math.random to a function that is
@@ -17,54 +21,83 @@
 //                             and other accumulated local entropy.
 //                             The generated seed string is returned.
 //
-//   Math.seedrandom('yowza', true);
+//   Math.seedrandom('yowza.', true);
 //                             Seeds using the given explicit seed mixed
 //                             together with accumulated entropy.
 //
-//   <script src="http://bit.ly/srandom-512"></script>
-//                             Seeds using physical random bits downloaded
-//                             from random.org.
-//
 //   <script src="https://jsonlib.appspot.com/urandom?callback=Math.seedrandom">
-//   </script>                 Seeds using urandom bits from call.jsonlib.com,
-//                             which is faster than random.org.
+//   </script>                 Seeds using urandom bits from a server.
 //
-// Examples:
+// More advanced examples:
 //
-//   Math.seedrandom("hello");            // Use "hello" as the seed.
-//   document.write(Math.random());       // Always 0.5463663768140734
-//   document.write(Math.random());       // Always 0.43973793770592234
+//   Math.seedrandom("hello.");           // Use "hello." as the seed.
+//   document.write(Math.random());       // Always 0.9282578795792454
+//   document.write(Math.random());       // Always 0.3752569768646784
 //   var rng1 = Math.random;              // Remember the current prng.
 //
 //   var autoseed = Math.seedrandom();    // New prng with an automatic seed.
-//   document.write(Math.random());       // Pretty much unpredictable.
+//   document.write(Math.random());       // Pretty much unpredictable x.
 //
-//   Math.random = rng1;                  // Continue "hello" prng sequence.
-//   document.write(Math.random());       // Always 0.554769432473455
+//   Math.random = rng1;                  // Continue "hello." prng sequence.
+//   document.write(Math.random());       // Always 0.7316977468919549
 //
 //   Math.seedrandom(autoseed);           // Restart at the previous seed.
-//   document.write(Math.random());       // Repeat the 'unpredictable' value.
+//   document.write(Math.random());       // Repeat the 'unpredictable' x.
 //
-// Notes:
+//   function reseed(event, count) {      // Define a custom entropy collector.
+//     var t = [];
+//     function w(e) {
+//       t.push([e.pageX, e.pageY, +new Date]);
+//       if (t.length < count) { return; }
+//       document.removeEventListener(event, w);
+//       Math.seedrandom(t, true);        // Mix in any previous entropy.
+//     }
+//     document.addEventListener(event, w);
+//   }
+//   reseed('mousemove', 100);            // Reseed after 100 mouse moves.
 //
-// Each time seedrandom('arg') is called, entropy from the passed seed
-// is accumulated in a pool to help generate future seeds for the
-// zero-argument form of Math.seedrandom, so entropy can be injected over
-// time by calling seedrandom with explicit data repeatedly.
+// Version notes:
+//
+// The random number sequence is the same as version 1.0 for string seeds.
+// Version 2.0 changed the sequence for non-string seeds.
+// Version 2.1 speeds seeding and uses window.crypto to autoseed if present.
+//
+// The standard ARC4 key scheduler cycles short keys, which means that
+// seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.
+// Therefore it is a good idea to add a terminator to avoid trivial
+// equivalences on short string seeds, e.g., Math.seedrandom(str + '\0').
+// Starting with version 2.0, a terminator is added automatically for
+// non-string seeds, so seeding with the number 111 is the same as seeding
+// with '111\0'.
+//
+// When seedrandom() is called with zero args, it uses a seed
+// drawn from the browser crypto object if present.  If there is no
+// crypto support, seedrandom() uses the current time, the native rng,
+// and a walk of several DOM objects to collect a few bits of entropy.
+//
+// Each time the one- or two-argument forms of seedrandom are called,
+// entropy from the passed seed is accumulated in a pool to help generate
+// future seeds for the zero- and two-argument forms of seedrandom.
 //
 // On speed - This javascript implementation of Math.random() is about
 // 3-10x slower than the built-in Math.random() because it is not native
-// code, but this is typically fast enough anyway.  Seeding is more expensive,
-// especially if you use auto-seeding.  Some details (timings on Chrome 4):
+// code, but that is typically fast enough.  Some details (timings on
+// Chrome 25 on a 2010 vintage macbook):
 //
-// Our Math.random()            - avg less than 0.002 milliseconds per call
-// seedrandom('explicit')       - avg less than 0.5 milliseconds per call
-// seedrandom('explicit', true) - avg less than 2 milliseconds per call
-// seedrandom()                 - avg about 38 milliseconds per call
+// seeded Math.random()          - avg less than 0.0002 milliseconds per call
+// seedrandom('explicit.')       - avg less than 0.2 milliseconds per call
+// seedrandom('explicit.', true) - avg less than 0.2 milliseconds per call
+// seedrandom() with crypto      - avg less than 0.2 milliseconds per call
+// seedrandom() without crypto   - avg about 12 milliseconds per call
+//
+// On a 2012 windows 7 1.5ghz i5 laptop, Chrome, Firefox 19, IE 10, and
+// Opera have similarly fast timings.  Slowest numbers are on Opera, with
+// about 0.0005 milliseconds per seeded Math.random() and 15 milliseconds
+// for autoseeding.
 //
 // LICENSE (BSD):
 //
-// Copyright 2010 David Bau, all rights reserved.
+// Copyright 2013 David Bau, all rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
@@ -94,42 +127,45 @@
 //
 /**
  * All code is in an anonymous closure to keep the global namespace clean.
- *
- * @param {number=} overflow
- * @param {number=} startdenom
  */
-(function (pool, math, width, chunks, significance, overflow, startdenom) {
+(function (
+    global, pool, math, width, chunks, digits) {
 
+//
+// The following constants are related to IEEE 754 limits.
+//
+var startdenom = math.pow(width, chunks),
+    significance = math.pow(2, digits),
+    overflow = significance * 2,
+    mask = width - 1;
 
 //
 // seedrandom()
 // This is the seedrandom function described above.
 //
-math['seedrandom'] = function seedrandom(seed, use_entropy) {
+math['seedrandom'] = function(seed, use_entropy) {
   var key = [];
-  var arc4;
 
   // Flatten the seed string or build one from local entropy if needed.
-  seed = mixkey(flatten(
-    use_entropy ? [seed, pool] :
-    arguments.length ? seed :
-    [new Date().getTime(), pool, window], 3), key);
+  var shortseed = mixkey(flatten(
+    use_entropy ? [seed, tostring(pool)] :
+    0 in arguments ? seed : autoseed(), 3), key);
 
   // Use the seed to initialize an ARC4 generator.
-  arc4 = new ARC4(key);
+  var arc4 = new ARC4(key);
 
   // Mix the randomness into accumulated entropy.
-  mixkey(arc4.S, pool);
+  mixkey(tostring(arc4.S), pool);
 
   // Override Math.random
 
   // This function returns a random double in [0, 1) that contains
   // randomness in every bit of the mantissa of the IEEE 754 value.
 
-  math['random'] = function random() {  // Closure to return a random double:
-    var n = arc4.g(chunks);             // Start with a numerator n < 2 ^ 48
-    var d = startdenom;                 //   and denominator d = 2 ^ 48.
-    var x = 0;                          //   and no 'extra last byte'.
+  math['random'] = function() {         // Closure to return a random double:
+    var n = arc4.g(chunks),             // Start with a numerator n < 2 ^ 48
+        d = startdenom,                 //   and denominator d = 2 ^ 48.
+        x = 0;                          //   and no 'extra last byte'.
     while (n < significance) {          // Fill up all significant digits by
       n = (n + x) * width;              //   shifting numerator and
       d *= width;                       //   denominator and generating a
@@ -144,7 +180,7 @@ math['seedrandom'] = function seedrandom(seed, use_entropy) {
   };
 
   // Return the seed that was used
-  return seed;
+  return shortseed;
 };
 
 //
@@ -159,66 +195,51 @@ math['seedrandom'] = function seedrandom(seed, use_entropy) {
 //
 /** @constructor */
 function ARC4(key) {
-  var t, u, me = this, keylen = key.length;
-  var i = 0, j = me.i = me.j = me.m = 0;
-  me.S = [];
-  me.c = [];
+  var t, keylen = key.length,
+      me = this, i = 0, j = me.i = me.j = 0, s = me.S = [];
 
   // The empty key [] is treated as [0].
   if (!keylen) { key = [keylen++]; }
 
   // Set up S using the standard key scheduling algorithm.
-  while (i < width) { me.S[i] = i++; }
+  while (i < width) {
+    s[i] = i++;
+  }
   for (i = 0; i < width; i++) {
-    t = me.S[i];
-    j = lowbits(j + t + key[i % keylen]);
-    u = me.S[j];
-    me.S[i] = u;
-    me.S[j] = t;
+    s[i] = s[j = mask & (j + key[i % keylen] + (t = s[i]))];
+    s[j] = t;
   }
 
   // The "g" method returns the next (count) outputs as one number.
-  me.g = function getnext(count) {
-    var s = me.S;
-    var i = lowbits(me.i + 1); var t = s[i];
-    var j = lowbits(me.j + t); var u = s[j];
-    s[i] = u;
-    s[j] = t;
-    var r = s[lowbits(t + u)];
-    while (--count) {
-      i = lowbits(i + 1); t = s[i];
-      j = lowbits(j + t); u = s[j];
-      s[i] = u;
-      s[j] = t;
-      r = r * width + s[lowbits(t + u)];
+  (me.g = function(count) {
+    // Using instance members instead of closure state nearly doubles speed.
+    var t, r = 0,
+        i = me.i, j = me.j, s = me.S;
+    while (count--) {
+      t = s[i = mask & (i + 1)];
+      r = r * width + s[mask & ((s[i] = s[j = mask & (j + t)]) + (s[j] = t))];
     }
-    me.i = i;
-    me.j = j;
+    me.i = i; me.j = j;
     return r;
-  };
-  // For robust unpredictability discard an initial batch of values.
-  // See http://www.rsa.com/rsalabs/node.asp?id=2009
-  me.g(width);
+    // For robust unpredictability discard an initial batch of values.
+    // See http://www.rsa.com/rsalabs/node.asp?id=2009
+  })(width);
 }
 
 //
 // flatten()
 // Converts an object tree to nested arrays of strings.
 //
-/** @param {Object=} result
-  * @param {string=} prop
-  * @param {string=} typ */
-function flatten(obj, depth, result, prop, typ) {
-  result = [];
-  typ = typeof(obj);
-  if (depth && typ == 'object') {
+function flatten(obj, depth) {
+  var result = [], typ = (typeof obj)[0], prop;
+  if (depth && typ == 'o') {
     for (prop in obj) {
-      if (prop.indexOf('S') < 5) {    // Avoid FF3 bug (local/sessionStorage)
+      if (obj.hasOwnProperty(prop)) {
         try { result.push(flatten(obj[prop], depth - 1)); } catch (e) {}
       }
     }
   }
-  return (result.length ? result : obj + (typ != 'string' ? '\0' : ''));
+  return (result.length ? result : typ == 's' ? obj : obj + '\0');
 }
 
 //
@@ -226,32 +247,37 @@ function flatten(obj, depth, result, prop, typ) {
 // Mixes a string seed into a key that is an array of integers, and
 // returns a shortened string seed that is equivalent to the result key.
 //
-/** @param {number=} smear
-  * @param {number=} j */
-function mixkey(seed, key, smear, j) {
-  seed += '';                         // Ensure the seed is a string
-  smear = 0;
-  for (j = 0; j < seed.length; j++) {
-    key[lowbits(j)] =
-      lowbits((smear ^= key[lowbits(j)] * 19) + seed.charCodeAt(j));
+function mixkey(seed, key) {
+  var stringseed = seed + '', smear, j = 0;
+  while (j < stringseed.length) {
+    key[mask & j] =
+      mask & ((smear ^= key[mask & j] * 19) + stringseed.charCodeAt(j++));
   }
-  seed = '';
-  for (j in key) { seed += String.fromCharCode(key[j]); }
-  return seed;
+  return tostring(key);
 }
 
 //
-// lowbits()
-// A quick "n mod width" for width a power of 2.
+// autoseed()
+// Returns an object for autoseeding, using window.crypto if available.
 //
-function lowbits(n) { return n & (width - 1); }
+/** @param {Uint8Array=} seed */
+function autoseed(seed) {
+  try {
+    global.crypto.getRandomValues(seed = new Uint8Array(width));
+    return tostring(seed);
+  } catch (e) {
+    return [+new Date, global.document, global.history,
+            global.navigator, global.screen, tostring(pool)];
+  }
+}
 
 //
-// The following constants are related to IEEE 754 limits.
+// tostring()
+// Converts an array of charcodes to a string
 //
-startdenom = math.pow(width, chunks);
-significance = math.pow(2, significance);
-overflow = significance * 2;
+function tostring(a) {
+  return String.fromCharCode.apply(0, a);
+}
 
 //
 // When seedrandom.js is loaded, we immediately mix a few bits
@@ -264,9 +290,10 @@ mixkey(math.random(), pool);
 
 // End anonymous scope, and pass initial values.
 })(
-  [],   // pool: entropy pool starts empty
-  Math, // math: package containing random, pow, and seedrandom
-  256,  // width: each RC4 output is 0 <= x < 256
-  6,    // chunks: at least six RC4 outputs for each double
-  52    // significance: there are 52 significant digits in a double
+  this,   // global window object
+  [],     // pool: entropy pool starts empty
+  Math,   // math: package containing random, pow, and seedrandom
+  256,    // width: each RC4 output is 0 <= x < 256
+  6,      // chunks: at least six RC4 outputs for each double
+  52      // digits: there are 52 significant digits in a double
 );
