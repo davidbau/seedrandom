@@ -51,7 +51,7 @@ function reseed(event, count) {      // Define a custom entropy collector.
   var t = [];
   function w(e) {
     t.push([e.pageX, e.pageY, +new Date]);
-    if (t.length < count) { return; }
+    if (t.length &lt; count) { return; }
     document.removeEventListener(event, w);
     Math.seedrandom(t, true);        // Mix in any previous entropy.
   }
