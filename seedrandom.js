@@ -1,5 +1,5 @@
-// seedrandom.js
-// Author: David Bau 12/25/2010
+// seedrandom.js version 2.0.
+// Author: David Bau 4/2/2011
 //
 // Defines a method Math.seedrandom() that, when called, substitutes
 // an explicitly seeded RC4-based algorithm for Math.random().  Also
@@ -68,18 +68,18 @@
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
-// 
+//
 //   1. Redistributions of source code must retain the above copyright
 //      notice, this list of conditions and the following disclaimer.
 //
 //   2. Redistributions in binary form must reproduce the above copyright
 //      notice, this list of conditions and the following disclaimer in the
 //      documentation and/or other materials provided with the distribution.
-// 
+//
 //   3. Neither the name of this module nor the names of its contributors may
 //      be used to endorse or promote products derived from this software
 //      without specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -95,7 +95,7 @@
 /**
  * All code is in an anonymous closure to keep the global namespace clean.
  *
- * @param {number=} overflow 
+ * @param {number=} overflow
  * @param {number=} startdenom
  */
 (function (pool, math, width, chunks, significance, overflow, startdenom) {
@@ -205,18 +205,20 @@ function ARC4(key) {
 // flatten()
 // Converts an object tree to nested arrays of strings.
 //
-/** @param {Object=} result 
-  * @param {string=} prop */
-function flatten(obj, depth, result, prop) {
+/** @param {Object=} result
+  * @param {string=} prop
+  * @param {string=} typ */
+function flatten(obj, depth, result, prop, typ) {
   result = [];
-  if (depth && typeof(obj) == 'object') {
+  typ = typeof(obj);
+  if (depth && typ == 'object') {
     for (prop in obj) {
       if (prop.indexOf('S') < 5) {    // Avoid FF3 bug (local/sessionStorage)
         try { result.push(flatten(obj[prop], depth - 1)); } catch (e) {}
       }
     }
   }
-  return result.length ? result : '' + obj;
+  return (result.length ? result : obj + (typ != 'string' ? '\0' : ''));
 }
 
 //
@@ -224,7 +226,7 @@ function flatten(obj, depth, result, prop) {
 // Mixes a string seed into a key that is an array of integers, and
 // returns a shortened string seed that is equivalent to the result key.
 //
-/** @param {number=} smear 
+/** @param {number=} smear
   * @param {number=} j */
 function mixkey(seed, key, smear, j) {
   seed += '';                         // Ensure the seed is a string
