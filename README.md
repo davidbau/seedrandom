@@ -3,7 +3,7 @@ seedrandom.js
 
 Sseeded random number generator for Javascript.
 
-version 2.1.
+version 2.2.
 
 Defines a method Math.seedrandom() that, when called, substitutes
 an explicitly seeded RC4-based algorithm for Math.random().  Also
@@ -65,6 +65,7 @@ Version notes:
 The random number sequence is the same as version 1.0 for string seeds.
 Version 2.0 changed the sequence for non-string seeds.
 Version 2.1 speeds seeding and uses window.crypto to autoseed if present.
+Version 2.2 alters non-crypto autoseeding to sweep up entropy from plugins.
 
 The standard ARC4 key scheduler cycles short keys, which means that
 seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.
@@ -96,10 +97,10 @@ seedrandom() with crypto      - avg less than 0.2 milliseconds per call
 seedrandom() without crypto   - avg about 12 milliseconds per call
 </pre>
 
-On a 2012 windows 7 1.5ghz i5 laptop, Chrome, Firefox 19, IE 10, and
-Opera have similarly fast timings.  Slowest numbers are on Opera, with
-about 0.0005 milliseconds per seeded Math.random() and 15 milliseconds
-for autoseeding.
+Autoseeding without crypto is somewhat slower, about 20-30 milliseconds on
+a 2012 windows 7 1.5ghz i5 laptop, as seen on Firefox 19, IE 10, and Opera.
+Seeded rng calls themselves are fast across these browsers, with slowest
+numbers on Opera at about 0.0005 ms per seeded Math.random().
 
 LICENSE (BSD):
 
