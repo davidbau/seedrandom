@@ -1,7 +1,7 @@
 seedrandom.js
 =============
 
-Sseeded random number generator for Javascript.
+Seeded random number generator for Javascript.
 
 version 2.2.
 
