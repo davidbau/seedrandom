@@ -17,75 +17,75 @@ to create a local PRNG without changing Math.random.
 Usage:
 
 <pre>
-  &lt;script src=http://davidbau.com/encode/seedrandom-min.js&gt;&lt;/script&gt;
+&lt;script src=http://davidbau.com/encode/seedrandom-min.js&gt;&lt;/script&gt;
 
-  Math.seedrandom('yay.');  Sets Math.random to a function that is
-                            initialized using the given explicit seed.
+Math.seedrandom('yay.');  Sets Math.random to a function that is
+                          initialized using the given explicit seed.
 
-  Math.seedrandom();        Sets Math.random to a function that is
-                            seeded using the current time, dom state,
-                            and other accumulated local entropy.
-                            The generated seed string is returned.
+Math.seedrandom();        Sets Math.random to a function that is
+                          seeded using the current time, dom state,
+                          and other accumulated local entropy.
+                          The generated seed string is returned.
 
-  Math.seedrandom('yowza.', true);
-                            Seeds using the given explicit seed mixed
-                            together with accumulated entropy.
+Math.seedrandom('yowza.', true);
+                          Seeds using the given explicit seed mixed
+                          together with accumulated entropy.
 
-  var myrng = new Math.seedrandom('yay.');
-  var n = myrng();          Using "new" creates a local prng without
-                            altering Math.random.
+var myrng = new Math.seedrandom('yay.');
+var n = myrng();          Using "new" creates a local prng without
+                          altering Math.random.
 
-  &lt;script src="https://jsonlib.appspot.com/urandom?callback=Math.seedrandom"&gt;
-  &lt;/script&gt;                 Seeds using urandom bits from a server.
+&lt;script src="https://jsonlib.appspot.com/urandom?callback=Math.seedrandom"&gt;
+&lt;/script&gt;                 Seeds using urandom bits from a server.
 
-  Math.seedrandom("hello.");           // Behavior is the same everywhere:
-  document.write(Math.random());       // Always 0.9282578795792454
-  document.write(Math.random());       // Always 0.3752569768646784
+Math.seedrandom("hello.");           // Behavior is the same everywhere:
+document.write(Math.random());       // Always 0.9282578795792454
+document.write(Math.random());       // Always 0.3752569768646784
 </pre>
 
 When used as a module, also returns local rng instances:
 
 <pre>
-  // With node.js:
-  var seedrandom = require('./seedrandom.js');
-  var rng = seedrandom('predictable.');
-  console.log(rng());                  // always 0.6646563869134212
+// With node.js:
+var seedrandom = require('./seedrandom.js');
+var rng = seedrandom('predictable.');
+console.log(rng());                  // always 0.6646563869134212
 
-  // With require.js or other AMD loader:
-  require(['seedrandom'], function(seedrandom) {
-    var rng = seedrandom('predictable.');
-    console.log(rng());                // always 0.6646563869134212
-  });
+// With require.js or other AMD loader:
+require(['seedrandom'], function(seedrandom) {
+  var rng = seedrandom('predictable.');
+  console.log(rng());                // always 0.6646563869134212
+});
 </pre>
 
 More examples:
 
 <pre>
-  var seed = Math.seedrandom();        // Use prng with an automatic seed.
-  document.write(Math.random());       // Pretty much unpredictable x.
+var seed = Math.seedrandom();        // Use prng with an automatic seed.
+document.write(Math.random());       // Pretty much unpredictable x.
 
-  var rng = new Math.seedrandom(seed); // A new prng with the same seed.
-  document.write(rng());               // Repeat the 'unpredictable' x.
+var rng = new Math.seedrandom(seed); // A new prng with the same seed.
+document.write(rng());               // Repeat the 'unpredictable' x.
 
-  function reseed(event, count) {      // Define a custom entropy collector.
-    var t = [];
-    function w(e) {
-      t.push([e.pageX, e.pageY, +new Date]);
-      if (t.length < count) { return; }
-      document.removeEventListener(event, w);
-      Math.seedrandom(t, true);        // Mix in any previous entropy.
-    }
-    document.addEventListener(event, w);
+function reseed(event, count) {      // Define a custom entropy collector.
+  var t = [];
+  function w(e) {
+    t.push([e.pageX, e.pageY, +new Date]);
+    if (t.length &lt; count) { return; }
+    document.removeEventListener(event, w);
+    Math.seedrandom(t, true);        // Mix in any previous entropy.
   }
-  reseed('mousemove', 100);            // Reseed after 100 mouse moves.
+  document.addEventListener(event, w);
+}
+reseed('mousemove', 100);            // Reseed after 100 mouse moves.
 
-  The callback third arg can be used to get both the prng and the seed.
-  The following returns both an autoseeded prng and the seed as an object,
-  without mutating Math.random:
+The callback third arg can be used to get both the prng and the seed.
+The following returns both an autoseeded prng and the seed as an object,
+without mutating Math.random:
 
-  var obj = Math.seedrandom(null, false, function(prng, seed) {
-     return { random: prng, seed: seed };
-  });
+var obj = Math.seedrandom(null, false, function(prng, seed) {
+  return { random: prng, seed: seed };
+});
 </pre>
 
 Version notes:
