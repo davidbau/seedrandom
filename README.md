@@ -5,7 +5,6 @@ Seeded random number generator for Javascript.
 
 version 2.3.
 
-Author: David Bau
 Date: 2013 Dec 22
 
 Defines a method Math.seedrandom() that, when called, substitutes
@@ -43,7 +42,7 @@ document.write(Math.random());       // Always 0.9282578795792454
 document.write(Math.random());       // Always 0.3752569768646784
 </pre>
 
-When used as a module, also returns local rng instances:
+When used as a module, also returns local PRNG instances:
 
 <pre>
 // With node.js:
