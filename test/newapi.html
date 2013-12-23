@@ -1,0 +1,35 @@
+<script src="../seedrandom.min.js"></script>
+<script src="lib/qunit-1.12.0.js"></script>
+<script>
+module("New API Test");
+
+test("Check that we can use new", function() {
+
+document.write("<p>Seeded random created with new:<br>");
+var check = [];
+var prng = new Math.seedrandom(1);
+var r;
+for (var j = 0; j < 5; ++j) {
+  r = prng();
+  document.write(r + "<br>");
+  check.push(r);
+}
+document.write("<p>Native random:<br>");
+for (var j = 0; j < 5; ++j) {
+  r = Math.random();
+  document.write(r + "<br>");
+  check.push(r);
+}
+var seed = Math.seedrandom(1);
+document.write("<p>Overridden random without new <font" +
+  (seed != "1\0" ? " style=color:red" : "") +
+  ">(return value " + seed + ")</font>:<br>");
+for (var j = 0; j < 10; ++j) {
+  r = Math.random();
+  ok((check[j] == r) == (j < 5));
+  document.write(((check[j] == r) == (j < 5) ?
+      "" + r : "<font style=color:red>" + r + "</font>") + "<br>");
+}
+});
+</script>
+

@@ -1,0 +1,28 @@
+{
+  "name": "seedrandom",
+  "version": "2.3.1",
+  "description": "Seeded random number generator for Javascript.",
+  "main": "seedrandom.js",
+  "scripts": {
+    "test": "grunt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/davidbau/seedrandom.git"
+  },
+  "author": "David Bau",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/davidbau/seedrandom/issues"
+  },
+  "homepage": "https://github.com/davidbau/seedrandom",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "0.4.2",
+    "grunt-cli": "0.1.11",
+    "grunt-contrib-uglify": "0.2.7",
+    "grunt-contrib-qunit": "0.3.0",
+    "grunt-release": "0.6.0",
+    "phantomjs": "1.9.2-6"
+  }
+}

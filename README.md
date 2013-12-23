@@ -94,6 +94,7 @@ Version 2.0 changed the sequence for non-string seeds.
 Version 2.1 speeds seeding and uses window.crypto to autoseed if present.
 Version 2.2 alters non-crypto autoseeding to sweep up entropy from plugins.
 Version 2.3 adds support for "new", module loading, and a null seed arg.
+Version 2.3.1 adds a build environment, module packaging, and tests.
 
 The standard ARC4 key scheduler cycles short keys, which means that
 seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.

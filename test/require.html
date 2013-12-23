@@ -1,0 +1,41 @@
+<script src="lib/require-2.1.9.js">
+</script>
+<script src="lib/qunit-1.12.0.js"></script>
+<script>
+module("Require.js Test");
+
+asyncTest("Check that we can load as an AMD", function() {
+
+require(["../seedrandom.min"], function(seedrandom) {
+  document.write("<p>Seeded random created using module:<br>");
+  var check = [];
+  var prng = seedrandom('predictable.');
+  var r;
+  for (var j = 0; j < 5; ++j) {
+    r = prng();
+    document.write(r + "<br>");
+    check.push(r);
+  }
+  document.write("<p>Native random:<br>");
+  for (var j = 0; j < 5; ++j) {
+    r = Math.random();
+    document.write(r + "<br>");
+    check.push(r);
+  }
+  var seed = Math.seedrandom('predictable.');
+  document.write("<p>Overridden random without new <font" +
+    (seed != "predictable." ? " style=color:red" : "") +
+    ">(return value " + seed + ")</font>:<br>");
+  for (var j = 0; j < 10; ++j) {
+    r = Math.random();
+    ok((check[j] == r) == (j < 5));
+    document.write(((check[j] == r) == (j < 5) ?
+        "" + r : "<font style=color:red>" + r + "</font>") + "<br>");
+  }
+  document.close();
+  start();
+});
+
+});
+</script>
+

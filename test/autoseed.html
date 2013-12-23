@@ -1,0 +1,48 @@
+<script src="../seedrandom.js"></script>
+<script src="lib/qunit-1.12.0.js"></script>
+<script>
+module("Simple Test");
+
+test("Check that we can reproduce a seed", function() {
+  var seed;
+  var time = new Date().getTime();
+  var seediter = 50;
+  for (var k = 0; k < seediter; ++k) {
+    seed = Math.seedrandom();
+  }
+  var seedtime = (new Date().getTime() - time) / seediter;
+  
+  time = new Date().getTime();
+  var vals = [];
+  var iters = 1000;
+  var thresh = 10.0 / iters;
+  var j;
+  for (j = 0; j < iters; ++j) {
+    var saw = Math.random();
+    vals.push(saw);
+  }
+  time = new Date().getTime() - time;
+  document.write('<p>Samples less than ' + thresh + ':<br>');
+  var errors = 0;
+  Math.seedrandom(seed);
+  for (j = 0; j < vals.length; ++j) {
+    var saw = vals[j];
+    var got = Math.random();
+    equal(saw, got);
+    if (saw == got) {
+      if (got < thresh) {
+        document.write('<span id="n'+j+'">' + got +
+                       ' OK</span> ');
+      }
+    } else if (errors < 100) {
+      document.write('<b style=color:red>' + saw + '-FAIL-' + got + '</b> ');
+      errors += 1;
+    }
+  }
+  
+  document.write('<div>' +
+     'Seeding took ' + seedtime + ' ms per seedrandom<br>' +
+     (!errors ? 'PASSED' : 'FAILED') + ' in ' + time + ' ms for ' + iters +
+     ' calls, ' + (time / iters) + ' ms per random()' + '</div>');
+});
+</script>
