@@ -1,0 +1,9 @@
+{
+  "name": "seedrandom",
+  "version": "2.3.1",
+  "description": "Seeded random number generator for Javascript.",
+  "devDependencies": {
+    "qunit": "latest",
+    "requirejs": "latest"
+  }
+}
