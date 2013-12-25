@@ -3,7 +3,7 @@ seedrandom.js
 
 Seeded random number generator for Javascript.
 
-version 2.3.
+version 2.3.1
 
 Date: 2013 Dec 22
 
@@ -45,7 +45,7 @@ document.write(Math.random());       // Always 0.3752569768646784
 When used as a module, also returns local PRNG instances:
 
 <pre>
-// With node.js:
+// With node.js (after "npm install seedrandom"):
 var seedrandom = require('./seedrandom.js');
 var rng = seedrandom('predictable.');
 console.log(rng());                  // always 0.6646563869134212
@@ -77,11 +77,13 @@ function reseed(event, count) {      // Define a custom entropy collector.
   document.addEventListener(event, w);
 }
 reseed('mousemove', 100);            // Reseed after 100 mouse moves.
+</pre>
 
 The callback third arg can be used to get both the prng and the seed.
 The following returns both an autoseeded prng and the seed as an object,
 without mutating Math.random:
 
+<pre>
 var obj = Math.seedrandom(null, false, function(prng, seed) {
   return { random: prng, seed: seed };
 });
@@ -90,11 +92,11 @@ var obj = Math.seedrandom(null, false, function(prng, seed) {
 Version notes:
 
 The random number sequence is the same as version 1.0 for string seeds.
-Version 2.0 changed the sequence for non-string seeds.
-Version 2.1 speeds seeding and uses window.crypto to autoseed if present.
-Version 2.2 alters non-crypto autoseeding to sweep up entropy from plugins.
-Version 2.3 adds support for "new", module loading, and a null seed arg.
-Version 2.3.1 adds a build environment, module packaging, and tests.
+* Version 2.0 changed the sequence for non-string seeds.
+* Version 2.1 speeds seeding and uses window.crypto to autoseed if present.
+* Version 2.2 alters non-crypto autoseeding to sweep up entropy from plugins.
+* Version 2.3 adds support for "new", module loading, and a null seed arg.
+* Version 2.3.1 adds a build environment, module packaging, and tests.
 
 The standard ARC4 key scheduler cycles short keys, which means that
 seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.

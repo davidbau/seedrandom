@@ -40,8 +40,8 @@
 //
 // When used as a module, also returns local PRNG instances:
 //
-//   // With node.js:
-//   var seedrandom = require('./seedrandom.js');
+//   // With node.js (after "npm install seedrandom"):
+//   var seedrandom = require('seedrandom');
 //   var rng = seedrandom('predictable.');
 //   console.log(rng());                  // always 0.6646563869134212
 //
@@ -71,9 +71,9 @@
 //   }
 //   reseed('mousemove', 100);            // Reseed after 100 mouse moves.
 //
-//   The callback third arg can be used to get both the prng and the seed.
-//   The following returns both an autoseeded prng and the seed as an object,
-//   without mutating Math.random:
+// The callback third arg can be used to get both the prng and the seed.
+// The following returns both an autoseeded prng and the seed as an object,
+// without mutating Math.random:
 //
 //   var obj = Math.seedrandom(null, false, function(prng, seed) {
 //      return { random: prng, seed: seed };
