@@ -46,7 +46,7 @@ When used as a module, also returns local PRNG instances:
 
 <pre>
 // With node.js (after "npm install seedrandom"):
-var seedrandom = require('./seedrandom.js');
+var seedrandom = require('seedrandom');
 var rng = seedrandom('predictable.');
 console.log(rng());                  // always 0.6646563869134212
 
