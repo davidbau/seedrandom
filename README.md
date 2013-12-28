@@ -13,47 +13,53 @@ supports automatic seeding from local or network sources of entropy.
 Can be used as a node.js or AMD module.  Can be called with "new"
 to create a local PRNG without changing Math.random.
 
-Usage:
+Basic usage:
 
 <pre>
-&lt;script src=http://davidbau.com/encode/seedrandom-min.js&gt;&lt;/script&gt;
+&lt;script src=http://davidbau.com/encode/seedrandom.min.js&gt;&lt;/script&gt;
 
-Math.seedrandom('yay.');  Sets Math.random to a function that is
-                          initialized using the given explicit seed.
+Math.seedrandom('yay.');  // Sets Math.random to a function that is
+                          // initialized using the given explicit seed.
 
-Math.seedrandom();        Sets Math.random to a function that is
-                          seeded using the current time, dom state,
-                          and other accumulated local entropy.
-                          The generated seed string is returned.
+Math.seedrandom();        // Sets Math.random to a function that is
+                          // seeded using the current time, dom state,
+                          // and other accumulated local entropy.
+                          // The generated seed string is returned.
 
 Math.seedrandom('yowza.', true);
-                          Seeds using the given explicit seed mixed
-                          together with accumulated entropy.
-
-var myrng = new Math.seedrandom('yay.');
-var n = myrng();          Using "new" creates a local prng without
-                          altering Math.random.
+                          // Seeds using the given explicit seed mixed
+                          // together with accumulated entropy.
 
 &lt;script src="https://jsonlib.appspot.com/urandom?callback=Math.seedrandom"&gt;
-&lt;/script&gt;                 Seeds using urandom bits from a server.
+&lt;/script&gt;           &lt;!-- Seeds using urandom bits from a server. --&gt;
 
 Math.seedrandom("hello.");           // Behavior is the same everywhere:
 document.write(Math.random());       // Always 0.9282578795792454
 document.write(Math.random());       // Always 0.3752569768646784
 </pre>
 
-When used as a module, also returns local PRNG instances:
+Math.seedrandom can be used as a constructor to return a seeded PRNG
+that is independent of Math.random:
+
+<pre>
+var myrng = new Math.seedrandom('yay.');
+var n = myrng();          // Using "new" creates a local prng without
+                          // altering Math.random.
+</pre>
+
+When used as a module, seedrandom is a function that returns a seeded
+PRNG instance without altering Math.random:
 
 <pre>
 // With node.js (after "npm install seedrandom"):
 var seedrandom = require('seedrandom');
-var rng = seedrandom('predictable.');
-console.log(rng());                  // always 0.6646563869134212
+var rng = seedrandom('hello.');
+console.log(rng());                  // always 0.9282578795792454
 
 // With require.js or other AMD loader:
 require(['seedrandom'], function(seedrandom) {
-  var rng = seedrandom('predictable.');
-  console.log(rng());                // always 0.6646563869134212
+  var rng = seedrandom('hello.');
+  console.log(rng());                // always 0.9282578795792454
 });
 </pre>
 

@@ -8,47 +8,48 @@
 // Can be used as a node.js or AMD module.  Can be called with "new"
 // to create a local PRNG without changing Math.random.
 //
-// http://davidbau.com/encode/seedrandom.js
-// http://davidbau.com/encode/seedrandom-min.js
+// Basic usage:
 //
-// Usage:
+//   <script src=http://davidbau.com/encode/seedrandom.min.js></script>
 //
-//   <script src=http://davidbau.com/encode/seedrandom-min.js></script>
+//   Math.seedrandom('yay.');  // Sets Math.random to a function that is
+//                             // initialized using the given explicit seed.
 //
-//   Math.seedrandom('yay.');  Sets Math.random to a function that is
-//                             initialized using the given explicit seed.
-//
-//   Math.seedrandom();        Sets Math.random to a function that is
-//                             seeded using the current time, dom state,
-//                             and other accumulated local entropy.
-//                             The generated seed string is returned.
+//   Math.seedrandom();        // Sets Math.random to a function that is
+//                             // seeded using the current time, dom state,
+//                             // and other accumulated local entropy.
+//                             // The generated seed string is returned.
 //
 //   Math.seedrandom('yowza.', true);
-//                             Seeds using the given explicit seed mixed
-//                             together with accumulated entropy.
-//
-//   var myrng = new Math.seedrandom('yay.');
-//   var n = myrng();          Using "new" creates a local prng without
-//                             altering Math.random.
+//                             // Seeds using the given explicit seed mixed
+//                             // together with accumulated entropy.
 //
 //   <script src="https://jsonlib.appspot.com/urandom?callback=Math.seedrandom">
-//   </script>                 Seeds using urandom bits from a server.
+//   </script>                 <!-- Seeds using urandom bits from a server. -->
 //
 //   Math.seedrandom("hello.");           // Behavior is the same everywhere:
 //   document.write(Math.random());       // Always 0.9282578795792454
 //   document.write(Math.random());       // Always 0.3752569768646784
 //
-// When used as a module, also returns local PRNG instances:
+// Math.seedrandom can be used as a constructor to return a seeded PRNG
+// that is independent of Math.random:
+//
+//   var myrng = new Math.seedrandom('yay.');
+//   var n = myrng();          // Using "new" creates a local prng without
+//                             // altering Math.random.
+//
+// When used as a module, seedrandom is a function that returns a seeded
+// PRNG instance without altering Math.random:
 //
 //   // With node.js (after "npm install seedrandom"):
 //   var seedrandom = require('seedrandom');
-//   var rng = seedrandom('predictable.');
-//   console.log(rng());                  // always 0.6646563869134212
+//   var rng = seedrandom('hello.');
+//   console.log(rng());                  // always 0.9282578795792454
 //
 //   // With require.js or other AMD loader:
 //   require(['seedrandom'], function(seedrandom) {
-//     var rng = seedrandom('predictable.');
-//     console.log(rng());                // always 0.6646563869134212
+//     var rng = seedrandom('hello.');
+//     console.log(rng());                // always 0.9282578795792454
 //   });
 //
 // More examples:
@@ -76,17 +77,17 @@
 // without mutating Math.random:
 //
 //   var obj = Math.seedrandom(null, false, function(prng, seed) {
-//      return { random: prng, seed: seed };
+//     return { random: prng, seed: seed };
 //   });
 //
 // Version notes:
 //
 // The random number sequence is the same as version 1.0 for string seeds.
-// Version 2.0 changed the sequence for non-string seeds.
-// Version 2.1 speeds seeding and uses window.crypto to autoseed if present.
-// Version 2.2 alters non-crypto autoseeding to sweep up entropy from plugins.
-// Version 2.3 adds support for "new", module loading, and a null seed arg.
-// Version 2.3.1 adds a build environment, module packaging, and tests.
+// * Version 2.0 changed the sequence for non-string seeds.
+// * Version 2.1 speeds seeding and uses window.crypto to autoseed if present.
+// * Version 2.2 alters non-crypto autoseeding to sweep up entropy from plugins.
+// * Version 2.3 adds support for "new", module loading, and a null seed arg.
+// * Version 2.3.1 adds a build environment, module packaging, and tests.
 //
 // The standard ARC4 key scheduler cycles short keys, which means that
 // seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.
@@ -150,6 +151,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
+
 /**
  * All code is in an anonymous closure to keep the global namespace clean.
  */
