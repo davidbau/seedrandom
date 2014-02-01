@@ -11,7 +11,7 @@
     "url": "git://github.com/davidbau/seedrandom.git"
   },
   "author": "David Bau",
-  "license": "BSD",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/davidbau/seedrandom/issues"
   },

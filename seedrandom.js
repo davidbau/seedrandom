@@ -1,6 +1,6 @@
 // seedrandom.js version 2.3.1
 // Author: David Bau
-// Date: 2013 Dec 23
+// Date: 2014 Feb 1
 //
 // Defines a method Math.seedrandom() that, when called, substitutes
 // an explicitly seeded RC4-based algorithm for Math.random().  Also
@@ -176,7 +176,7 @@ impl = math['seed' + rngname] = function(seed, use_entropy, callback) {
   // Flatten the seed string or build one from local entropy if needed.
   var shortseed = mixkey(flatten(
     use_entropy ? [seed, tostring(pool)] :
-    (seed === null || seed === undefined) ? autoseed() : seed, 3), key);
+    (seed == null) ? autoseed() : seed, 3), key);
 
   // Use the seed to initialize an ARC4 generator.
   var arc4 = new ARC4(key);
@@ -262,13 +262,13 @@ function ARC4(key) {
 // Converts an object tree to nested arrays of strings.
 //
 function flatten(obj, depth) {
-  var result = [], typ = (typeof obj)[0], prop;
-  if (depth && typ == 'o') {
+  var result = [], typ = (typeof obj), prop;
+  if (depth && typ == 'object') {
     for (prop in obj) {
       try { result.push(flatten(obj[prop], depth - 1)); } catch (e) {}
     }
   }
-  return (result.length ? result : typ == 's' ? obj : obj + '\0');
+  return (result.length ? result : typ == 'string' ? obj : obj + '\0');
 }
 
 //
@@ -335,7 +335,7 @@ if (module && module.exports) {
   256,    // width: each RC4 output is 0 <= x < 256
   6,      // chunks: at least six RC4 outputs for each double
   52,     // digits: there are 52 significant digits in a double
-  (typeof module)[0] == 'o' && module,  // present in node.js
-  (typeof define)[0] == 'f' && define,  // present with an AMD loader
+  (typeof module) == 'object' && module,    // present in node.js
+  (typeof define) == 'function' && define,  // present with an AMD loader
   'random'// rngname: name for Math.random and Math.seedrandom
 );
