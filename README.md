@@ -3,9 +3,9 @@ seedrandom.js
 
 Seeded random number generator for Javascript.
 
-version 2.3.1
+version 2.3.3
 
-Date: 2013 Dec 22
+Date: 2014 Feb 4
 
 Defines a method Math.seedrandom() that, when called, substitutes
 an explicitly seeded RC4-based algorithm for Math.random().  Also

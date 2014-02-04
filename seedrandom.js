@@ -1,6 +1,6 @@
-// seedrandom.js version 2.3.1
+// seedrandom.js version 2.3.3
 // Author: David Bau
-// Date: 2014 Feb 1
+// Date: 2014 Feb 4
 //
 // Defines a method Math.seedrandom() that, when called, substitutes
 // an explicitly seeded RC4-based algorithm for Math.random().  Also
@@ -88,6 +88,7 @@
 // * Version 2.2 alters non-crypto autoseeding to sweep up entropy from plugins.
 // * Version 2.3 adds support for "new", module loading, and a null seed arg.
 // * Version 2.3.1 adds a build environment, module packaging, and tests.
+// * Version 2.3.3 fixes bugs on IE8, and switches to MIT license.
 //
 // The standard ARC4 key scheduler cycles short keys, which means that
 // seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.
