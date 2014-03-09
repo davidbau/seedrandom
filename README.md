@@ -3,8 +3,8 @@ seedrandom.js
 
 Seeded random number generator for Javascript.
 
-version 2.3.4
-Author: David Bau
+version 2.3.4<br>
+Author: David Bau<br>
 Date: 2014 Mar 9
 
 Defines a method Math.seedrandom() that, when called, substitutes
@@ -31,12 +31,16 @@ Math.seedrandom('yowza.', true);
                           // together with accumulated entropy.
 </pre>
 
+<pre>
 &lt;script src="https://jsonlib.appspot.com/urandom?callback=Math.seedrandom"&gt;
 &lt;/script&gt;                 &lt;!-- Seeds using urandom bits from a server. --&gt;
+</pre>
 
+<pre>
 Math.seedrandom("hello.");           // Behavior is the same everywhere:
 document.write(Math.random());       // Always 0.9282578795792454
 document.write(Math.random());       // Always 0.3752569768646784
+</pre>
 
 Math.seedrandom can be used as a constructor to return a seeded PRNG
 that is independent of Math.random:
