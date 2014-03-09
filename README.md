@@ -3,9 +3,9 @@ seedrandom.js
 
 Seeded random number generator for Javascript.
 
-version 2.3.3
-
-Date: 2014 Feb 4
+version 2.3.4
+Author: David Bau
+Date: 2014 Mar 9
 
 Defines a method Math.seedrandom() that, when called, substitutes
 an explicitly seeded RC4-based algorithm for Math.random().  Also
@@ -29,14 +29,14 @@ Math.seedrandom();        // Sets Math.random to a function that is
 Math.seedrandom('yowza.', true);
                           // Seeds using the given explicit seed mixed
                           // together with accumulated entropy.
+</pre>
 
 &lt;script src="https://jsonlib.appspot.com/urandom?callback=Math.seedrandom"&gt;
-&lt;/script&gt;           &lt;!-- Seeds using urandom bits from a server. --&gt;
+&lt;/script&gt;                 &lt;!-- Seeds using urandom bits from a server. --&gt;
 
 Math.seedrandom("hello.");           // Behavior is the same everywhere:
 document.write(Math.random());       // Always 0.9282578795792454
 document.write(Math.random());       // Always 0.3752569768646784
-</pre>
 
 Math.seedrandom can be used as a constructor to return a seeded PRNG
 that is independent of Math.random:
@@ -103,6 +103,8 @@ The random number sequence is the same as version 1.0 for string seeds.
 * Version 2.2 alters non-crypto autoseeding to sweep up entropy from plugins.
 * Version 2.3 adds support for "new", module loading, and a null seed arg.
 * Version 2.3.1 adds a build environment, module packaging, and tests.
+* Version 2.3.3 fixes bugs on IE8, and switches to MIT license.
+* Version 2.3.4 fixes documentation to contain the MIT license.
 
 The standard ARC4 key scheduler cycles short keys, which means that
 seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.
@@ -140,21 +142,22 @@ LICENSE (MIT):
 
 Copyright (c)2014 David Bau.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 

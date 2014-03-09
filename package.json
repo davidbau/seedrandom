@@ -1,6 +1,6 @@
 {
   "name": "seedrandom",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "description": "Seeded random number generator for Javascript.",
   "main": "seedrandom.js",
   "scripts": {
@@ -17,12 +17,12 @@
   },
   "homepage": "https://github.com/davidbau/seedrandom",
   "devDependencies": {
-    "grunt": "0.4.2",
-    "grunt-bowercopy": "0.4.1",
-    "grunt-cli": "0.1.11",
-    "grunt-contrib-uglify": "0.2.7",
-    "grunt-contrib-qunit": "0.3.0",
-    "grunt-release": "0.6.0",
-    "phantomjs": "1.9.2-6"
+    "grunt": "latest",
+    "grunt-bowercopy": "latest",
+    "grunt-cli": "latest",
+    "grunt-contrib-uglify": "latest",
+    "grunt-contrib-qunit": "latest",
+    "grunt-release": "latest",
+    "phantomjs": "latest"
   }
 }
