@@ -1,12 +1,12 @@
-<script src="lib/require.js">
-</script>
+<script src="lib/require.js"></script>
+<script src="../seedrandom.min.js"></script>
 <script src="lib/qunit.js"></script>
 <script>
 module("Require.js Test");
 
 asyncTest("Check that we can load as an AMD", function() {
 
-require(["../seedrandom.min"], function(seedrandom) {
+require(["seedrandom"], function(seedrandom) {
   document.write("<p>Seeded random created using module:<br>");
   var check = [];
   var prng = seedrandom('predictable.');

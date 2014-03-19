@@ -319,7 +319,7 @@ mixkey(math[rngname](), pool);
 if (module && module.exports) {
   module.exports = impl;
 } else if (define && define.amd) {
-  define(function() { return impl; });
+  define('seedrandom', function() { return impl; });
 }
 
 // End anonymous scope, and pass initial values.
