@@ -3,6 +3,9 @@
   "version": "2.3.4",
   "description": "Seeded random number generator for Javascript.",
   "main": "seedrandom.js",
+  "keywords": [
+    "random", "seed", "crypto"
+  ],
   "scripts": {
     "test": "grunt"
   },
