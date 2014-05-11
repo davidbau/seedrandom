@@ -1,10 +1,12 @@
 {
   "name": "seedrandom",
-  "version": "2.3.4",
+  "version": "2.3.5",
   "description": "Seeded random number generator for Javascript.",
   "main": "seedrandom.js",
   "keywords": [
-    "random", "seed", "crypto"
+    "random",
+    "seed",
+    "crypto"
   ],
   "scripts": {
     "test": "grunt"
@@ -26,6 +28,7 @@
     "grunt-contrib-uglify": "latest",
     "grunt-contrib-qunit": "latest",
     "grunt-release": "latest",
+    "grunt-sed": "latest",
     "phantomjs": "latest"
   }
 }

@@ -32,6 +32,13 @@ module.exports = function(grunt) {
         }
       }
     },
+    sed: {
+      nullchar: {
+        path: "<%= pkg.name %>.min.js",
+        pattern: '\\\\x00',
+        replacement: '\\0'
+      },
+    },
     qunit: {
       all: ["test/*.html"]
     },
@@ -46,7 +53,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-release');
   grunt.loadNpmTasks('grunt-bowercopy');
+  grunt.loadNpmTasks('grunt-sed');
 
-  grunt.registerTask("default", ["uglify", "qunit"]);
+  grunt.registerTask("default", ["uglify", "sed", "qunit"]);
 };
 
