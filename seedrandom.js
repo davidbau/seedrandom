@@ -1,151 +1,187 @@
-// seedrandom.js version 2.3.4
-// Author: David Bau
-// Date: 2014 Mar 9
-//
-// Defines a method Math.seedrandom() that, when called, substitutes
-// an explicitly seeded RC4-based algorithm for Math.random().  Also
-// supports automatic seeding from local or network sources of entropy.
-// Can be used as a node.js or AMD module.  Can be called with "new"
-// to create a local PRNG without changing Math.random.
-//
-// Basic usage:
-//
-//   <script src=http://davidbau.com/encode/seedrandom.min.js></script>
-//
-//   Math.seedrandom('yay.');  // Sets Math.random to a function that is
-//                             // initialized using the given explicit seed.
-//
-//   Math.seedrandom();        // Sets Math.random to a function that is
-//                             // seeded using the current time, dom state,
-//                             // and other accumulated local entropy.
-//                             // The generated seed string is returned.
-//
-//   Math.seedrandom('yowza.', true);
-//                             // Seeds using the given explicit seed mixed
-//                             // together with accumulated entropy.
-//
-//   <script src="https://jsonlib.appspot.com/urandom?callback=Math.seedrandom">
-//   </script>                 <!-- Seeds using urandom bits from a server. -->
-//
-//   Math.seedrandom("hello.");           // Behavior is the same everywhere:
-//   document.write(Math.random());       // Always 0.9282578795792454
-//   document.write(Math.random());       // Always 0.3752569768646784
-//
-// Math.seedrandom can be used as a constructor to return a seeded PRNG
-// that is independent of Math.random:
-//
-//   var myrng = new Math.seedrandom('yay.');
-//   var n = myrng();          // Using "new" creates a local prng without
-//                             // altering Math.random.
-//
-// When used as a module, seedrandom is a function that returns a seeded
-// PRNG instance without altering Math.random:
-//
-//   // With node.js (after "npm install seedrandom"):
-//   var seedrandom = require('seedrandom');
-//   var rng = seedrandom('hello.');
-//   console.log(rng());                  // always 0.9282578795792454
-//
-//   // With require.js or other AMD loader:
-//   require(['seedrandom'], function(seedrandom) {
-//     var rng = seedrandom('hello.');
-//     console.log(rng());                // always 0.9282578795792454
-//   });
-//
-// More examples:
-//
-//   var seed = Math.seedrandom();        // Use prng with an automatic seed.
-//   document.write(Math.random());       // Pretty much unpredictable x.
-//
-//   var rng = new Math.seedrandom(seed); // A new prng with the same seed.
-//   document.write(rng());               // Repeat the 'unpredictable' x.
-//
-//   function reseed(event, count) {      // Define a custom entropy collector.
-//     var t = [];
-//     function w(e) {
-//       t.push([e.pageX, e.pageY, +new Date]);
-//       if (t.length < count) { return; }
-//       document.removeEventListener(event, w);
-//       Math.seedrandom(t, true);        // Mix in any previous entropy.
-//     }
-//     document.addEventListener(event, w);
-//   }
-//   reseed('mousemove', 100);            // Reseed after 100 mouse moves.
-//
-// The callback third arg can be used to get both the prng and the seed.
-// The following returns both an autoseeded prng and the seed as an object,
-// without mutating Math.random:
-//
-//   var obj = Math.seedrandom(null, false, function(prng, seed) {
-//     return { random: prng, seed: seed };
-//   });
-//
-// Version notes:
-//
-// The random number sequence is the same as version 1.0 for string seeds.
-// * Version 2.0 changed the sequence for non-string seeds.
-// * Version 2.1 speeds seeding and uses window.crypto to autoseed if present.
-// * Version 2.2 alters non-crypto autoseeding to sweep up entropy from plugins.
-// * Version 2.3 adds support for "new", module loading, and a null seed arg.
-// * Version 2.3.1 adds a build environment, module packaging, and tests.
-// * Version 2.3.3 fixes bugs on IE8, and switches to MIT license.
-// * Version 2.3.4 fixes documentation to contain the MIT license.
-//
-// The standard ARC4 key scheduler cycles short keys, which means that
-// seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.
-// Therefore it is a good idea to add a terminator to avoid trivial
-// equivalences on short string seeds, e.g., Math.seedrandom(str + '\0').
-// Starting with version 2.0, a terminator is added automatically for
-// non-string seeds, so seeding with the number 111 is the same as seeding
-// with '111\0'.
-//
-// When seedrandom() is called with zero args or a null seed, it uses a
-// seed drawn from the browser crypto object if present.  If there is no
-// crypto support, seedrandom() uses the current time, the native rng,
-// and a walk of several DOM objects to collect a few bits of entropy.
-//
-// Each time the one- or two-argument forms of seedrandom are called,
-// entropy from the passed seed is accumulated in a pool to help generate
-// future seeds for the zero- and two-argument forms of seedrandom.
-//
-// On speed - This javascript implementation of Math.random() is several
-// times slower than the built-in Math.random() because it is not native
-// code, but that is typically fast enough.  Some details (timings on
-// Chrome 25 on a 2010 vintage macbook):
-//
-// seeded Math.random()          - avg less than 0.0002 milliseconds per call
-// seedrandom('explicit.')       - avg less than 0.2 milliseconds per call
-// seedrandom('explicit.', true) - avg less than 0.2 milliseconds per call
-// seedrandom() with crypto      - avg less than 0.2 milliseconds per call
-//
-// Autoseeding without crypto is somewhat slower, about 20-30 milliseconds on
-// a 2012 windows 7 1.5ghz i5 laptop, as seen on Firefox 19, IE 10, and Opera.
-// Seeded rng calls themselves are fast across these browsers, with slowest
-// numbers on Opera at about 0.0005 ms per seeded Math.random().
-//
-// LICENSE (MIT):
-//
-// Copyright (c)2014 David Bau.
-//
-// Permission is hereby granted, free of charge, to any person obtaining
-// a copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to
-// permit persons to whom the Software is furnished to do so, subject to
-// the following conditions:
-//
-// The above copyright notice and this permission notice shall be
-// included in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-// CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
+/**
+
+seedrandom.js
+=============
+
+Seeded random number generator for Javascript.
+
+version 2.3.5<br>
+Author: David Bau<br>
+Date: 2014 May 12
+
+Can be used as a plain script, a node.js module or an AMD module.
+
+Script tag usage
+----------------
+
+<script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.5/seedrandom.min.js>
+</script>
+
+// Sets Math.random to a PRNG initialized using the given explicit seed.
+Math.seedrandom('hello.');
+console.log(Math.random());          // Always 0.9282578795792454
+console.log(Math.random());          // Always 0.3752569768646784
+
+// Sets Math.random to an ARC4-based PRNG that is autoseeded using the
+// current time, dom state, and other accumulated local entropy.
+// The generated seed string is returned.
+Math.seedrandom();
+console.log(Math.random());          // Reasonably unpredictable.
+
+// Seeds using the given explicit seed mixed with accumulated entropy.
+Math.seedrandom('added entropy.', { entropy: true });
+console.log(Math.random());          // As unpredictable as added entropy.
+
+// Use "new" to create a local prng without altering Math.random.
+var myrng = new Math.seedrandom('hello.');
+console.log(myrng());                // Always 0.9282578795792454
+
+
+Node.js usage
+-------------
+
+npm install seedrandom
+
+// Local PRNG: does not affect Math.random.
+var seedrandom = require('seedrandom');
+var rng = seedrandom('hello.');
+console.log(rng());                  // Always 0.9282578795792454
+
+// Global PRNG: set Math.random.
+seedrandom('hello.', { global: true });
+console.log(Math.random());          // Always 0.9282578795792454
+
+// Autoseeded ARC4-based PRNG.
+rng = seedrandom();
+console.log(Math.random());          // Reasonably unpredictable.
+
+// Mixing accumulated entropy.
+rng = seedrandom('added entropy.', { entropy: true });
+console.log(Math.random());          // As unpredictable as added entropy.
+
+
+Require.js usage
+----------------
+
+Similar to node.js usage:
+
+bower install seedrandom
+
+require(['seedrandom'], function(seedrandom) {
+  var rng = seedrandom('hello.');
+  console.log(rng());                  // Always 0.9282578795792454
+});
+
+
+Network seeding via a script tag
+--------------------------------
+
+<script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.5/seedrandom.min.js>
+</script>
+<!-- Seeds using urandom bits from a server. -->
+<script src=//jsonlib.appspot.com/urandom?callback=Math.seedrandom">
+</script>
+
+Examples of manipulating the seed for various purposes:
+
+var seed = Math.seedrandom();        // Use prng with an automatic seed.
+document.write(Math.random());       // Pretty much unpredictable x.
+
+var rng = new Math.seedrandom(seed); // A new prng with the same seed.
+document.write(rng());               // Repeat the 'unpredictable' x.
+
+function reseed(event, count) {      // Define a custom entropy collector.
+  var t = [];
+  function w(e) {
+    t.push([e.pageX, e.pageY, +new Date]);
+    if (t.length < count) { return; }
+    document.removeEventListener(event, w);
+    Math.seedrandom(t, { entropy: true });
+  }
+  document.addEventListener(event, w);
+}
+reseed('mousemove', 100);            // Reseed after 100 mouse moves.
+
+The "pass" option can be used to get both the prng and the seed.
+The following returns both an autoseeded prng and the seed as an object,
+without mutating Math.random:
+
+var obj = Math.seedrandom(null, { pass: function(prng, seed) {
+  return { random: prng, seed: seed };
+}});
+
+
+Version notes
+-------------
+
+The random number sequence is the same as version 1.0 for string seeds.
+* Version 2.0 changed the sequence for non-string seeds.
+* Version 2.1 speeds seeding and uses window.crypto to autoseed if present.
+* Version 2.2 alters non-crypto autoseeding to sweep up entropy from plugins.
+* Version 2.3 adds support for "new", module loading, and a null seed arg.
+* Version 2.3.1 adds a build environment, module packaging, and tests.
+* Version 2.3.3 fixes bugs on IE8, and switches to MIT license.
+* Version 2.3.4 fixes documentation to contain the MIT license.
+* Version 2.3.5 adds a readable options object argument.
+
+The standard ARC4 key scheduler cycles short keys, which means that
+seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.
+Therefore it is a good idea to add a terminator to avoid trivial
+equivalences on short string seeds, e.g., Math.seedrandom(str + '\0').
+Starting with version 2.0, a terminator is added automatically for
+non-string seeds, so seeding with the number 111 is the same as seeding
+with '111\0'.
+
+When seedrandom() is called with zero args or a null seed, it uses a
+seed drawn from the browser crypto object if present.  If there is no
+crypto support, seedrandom() uses the current time, the native rng,
+and a walk of several DOM objects to collect a few bits of entropy.
+
+Each time the one- or two-argument forms of seedrandom are called,
+entropy from the passed seed is accumulated in a pool to help generate
+future seeds for the zero- and two-argument forms of seedrandom.
+
+On speed - This javascript implementation of Math.random() is several
+times slower than the built-in Math.random() because it is not native
+code, but that is typically fast enough.  Some details (timings on
+Chrome 25 on a 2010 vintage macbook):
+
+* seeded Math.random()          - avg less than 0.0002 milliseconds per call
+* seedrandom('explicit.')       - avg less than 0.2 milliseconds per call
+* seedrandom('explicit.', true) - avg less than 0.2 milliseconds per call
+* seedrandom() with crypto      - avg less than 0.2 milliseconds per call
+
+Autoseeding without crypto is somewhat slower, about 20-30 milliseconds on
+a 2012 windows 7 1.5ghz i5 laptop, as seen on Firefox 19, IE 10, and Opera.
+Seeded rng calls themselves are fast across these browsers, with slowest
+numbers on Opera at about 0.0005 ms per seeded Math.random().
+
+
+LICENSE (MIT)
+-------------
+
+Copyright (c)2014 David Bau.
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+*/
 
 /**
  * All code is in an anonymous closure to keep the global namespace clean.
@@ -165,12 +201,13 @@ var startdenom = math.pow(width, chunks),
 // seedrandom()
 // This is the seedrandom function described above.
 //
-impl = math['seed' + rngname] = function(seed, use_entropy, callback) {
+impl = math['seed' + rngname] = function(seed, options, callback) {
   var key = [];
+  options = (options == true) ? { entropy: true } : (options || {});
 
   // Flatten the seed string or build one from local entropy if needed.
   var shortseed = mixkey(flatten(
-    use_entropy ? [seed, tostring(pool)] :
+    options.entropy ? [seed, tostring(pool)] :
     (seed == null) ? autoseed() : seed, 3), key);
 
   // Use the seed to initialize an ARC4 generator.
@@ -180,7 +217,7 @@ impl = math['seed' + rngname] = function(seed, use_entropy, callback) {
   mixkey(tostring(arc4.S), pool);
 
   // Calling convention: what to return as a function of prng, seed, is_math.
-  return (callback ||
+  return (options.pass || callback ||
       // If called as a method of Math (Math.seedrandom()), mutate Math.random
       // because that is how seedrandom.js has worked since v1.0.  Otherwise,
       // it is a newer calling convention, so return the prng directly.
@@ -206,7 +243,7 @@ impl = math['seed' + rngname] = function(seed, use_entropy, callback) {
       x >>>= 1;                         //   we have exactly the desired bits.
     }
     return (n + x) / d;                 // Form the number within [0, 1).
-  }, shortseed, this == math);
+  }, shortseed, 'global' in options ? options.global : (this == math));
 };
 
 //
