@@ -47,17 +47,17 @@ var seedrandom = require('seedrandom');
 var rng = seedrandom('hello.');
 console.log(rng());                  // Always 0.9282578795792454
 
+// Autoseeded ARC4-based PRNG.
+rng = seedrandom();
+console.log(rng());                  // Reasonably unpredictable.
+
 // Global PRNG: set Math.random.
 seedrandom('hello.', { global: true });
 console.log(Math.random());          // Always 0.9282578795792454
 
-// Autoseeded ARC4-based PRNG.
-rng = seedrandom();
-console.log(Math.random());          // Reasonably unpredictable.
-
 // Mixing accumulated entropy.
 rng = seedrandom('added entropy.', { entropy: true });
-console.log(Math.random());          // As unpredictable as added entropy.
+console.log(rng());                  // As unpredictable as added entropy.
 
 
 Require.js usage
