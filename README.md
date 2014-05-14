@@ -6,9 +6,9 @@ seedrandom.js
 
 Seeded random number generator for Javascript.
 
-version 2.3.5<br>
+version 2.3.6<br>
 Author: David Bau<br>
-Date: 2014 May 12
+Date: 2014 May 14
 
 Can be used as a plain script, a node.js module or an AMD module.
 
@@ -17,9 +17,11 @@ Script tag usage
 ----------------
 
 <pre>
-&lt;script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.5/seedrandom.min.js&gt;
+&lt;script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.6/seedrandom.min.js&gt;
 &lt;/script&gt;
+</pre>
 
+<pre>
 // Sets Math.random to a PRNG initialized using the given explicit seed.
 Math.seedrandom('hello.');
 console.log(Math.random());          // Always 0.9282578795792454
@@ -89,7 +91,7 @@ Network seeding via a script tag
 --------------------------------
 
 <pre>
-&lt;script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.5/seedrandom.min.js&gt;
+&lt;script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.6/seedrandom.min.js&gt;
 &lt;/script&gt;
 &lt;!-- Seeds using urandom bits from a server. --&gt;
 &lt;script src=//jsonlib.appspot.com/urandom?callback=Math.seedrandom"&gt;
@@ -138,9 +140,8 @@ The random number sequence is the same as version 1.0 for string seeds.
 * Version 2.2 alters non-crypto autoseeding to sweep up entropy from plugins.
 * Version 2.3 adds support for "new", module loading, and a null seed arg.
 * Version 2.3.1 adds a build environment, module packaging, and tests.
-* Version 2.3.3 fixes bugs on IE8, and switches to MIT license.
-* Version 2.3.4 fixes documentation to contain the MIT license.
-* Version 2.3.5 adds a readable options object argument.
+* Version 2.3.4 fixes bugs on IE8, and switches to MIT license.
+* Version 2.3.6 adds a readable options object argument.
 
 The standard ARC4 key scheduler cycles short keys, which means that
 seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.
