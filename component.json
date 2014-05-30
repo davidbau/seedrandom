@@ -1,9 +1,10 @@
 {
   "name": "seedrandom",
-  "description": "seeded random number generator for Javascript",
-  "repository": "automata/seedrandom",
+  "version": "2.3.6",
+  "description": "Seeded random number generator for Javascript",
+  "repository": "davidbau/seedrandom",
   "main": "seedrandom.js",
-  "scripts": [
-    "seedrandom.js"
-  ]
+  "scripts": [ "seedrandom.js" ],
+  "keywords": [ "random", "seed", "crypto" ],
+  "license": "MIT"
 }
