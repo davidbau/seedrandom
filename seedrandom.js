@@ -5,8 +5,8 @@ seedrandom.js
 
 Seeded random number generator for Javascript.
 
-version 2.3.6<br>
-Author: David Bau<br>
+version 2.3.6
+Author: David Bau
 Date: 2014 May 14
 
 Can be used as a plain script, a node.js module or an AMD module.
