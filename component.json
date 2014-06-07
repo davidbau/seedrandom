@@ -1,0 +1,9 @@
+{
+  "name": "seedrandom",
+  "description": "seeded random number generator for Javascript",
+  "repository": "automata/seedrandom",
+  "main": "seedrandom.js",
+  "scripts": [
+    "seedrandom.js"
+  ]
+}
