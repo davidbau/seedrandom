@@ -152,6 +152,7 @@ Version notes
 -------------
 
 The random number sequence is the same as version 1.0 for string seeds.
+
 * Version 2.0 changed the sequence for non-string seeds.
 * Version 2.1 speeds seeding and uses window.crypto to autoseed if present.
 * Version 2.2 alters non-crypto autoseeding to sweep up entropy from plugins.
