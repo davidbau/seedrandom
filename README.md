@@ -87,8 +87,8 @@ require(['seedrandom'], function(seedrandom) {
 </pre>
 
 
-Network seeding via a script tag
---------------------------------
+Network seeding
+---------------
 
 <pre>
 &lt;script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.6/seedrandom.min.js&gt;
@@ -96,9 +96,26 @@ Network seeding via a script tag
 &lt;!-- Seeds using urandom bits from a server. --&gt;
 &lt;script src=//jsonlib.appspot.com/urandom?callback=Math.seedrandom"&gt;
 &lt;/script&gt;
+
+&lt;!-- Seeds mixing in random.org bits --&gt;
+&lt;script&gt;
+(function(x, u, s){
+  try {
+    // Make a synchronous request to random.org.
+    x.open('GET', u, false);
+    x.send();
+    s = unescape(x.response.trim().replace(/^|\s/g, '%'));
+  } finally {
+    // Seed with the response, or autoseed on failure.
+    Math.seedrandom(null, !!s);
+  }
+})(new XMLHttpRequest, 'https://www.random.org/integers/' +
+  '?num=256&min=0&max=255&col=1&base=16&format=plain&rnd=new');
+&lt;/script&gt;
 </pre>
 
-Examples of manipulating the seed for various purposes:
+Reseeding using user input
+--------------------------
 
 <pre>
 var seed = Math.seedrandom();        // Use prng with an automatic seed.

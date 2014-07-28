@@ -73,16 +73,34 @@ require(['seedrandom'], function(seedrandom) {
 });
 
 
-Network seeding via a script tag
---------------------------------
+Network seeding
+---------------
 
 <script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.6/seedrandom.min.js>
 </script>
+
 <!-- Seeds using urandom bits from a server. -->
 <script src=//jsonlib.appspot.com/urandom?callback=Math.seedrandom">
 </script>
 
-Examples of manipulating the seed for various purposes:
+<!-- Seeds mixing in random.org bits -->
+<script>
+(function(x, u, s){
+  try {
+    // Make a synchronous request to random.org.
+    x.open('GET', u, false);
+    x.send();
+    s = unescape(x.response.trim().replace(/^|\s/g, '%'));
+  } finally {
+    // Seed with the response, or autoseed on failure.
+    Math.seedrandom(null, !!s);
+  }
+})(new XMLHttpRequest, 'https://www.random.org/integers/' +
+  '?num=256&min=0&max=255&col=1&base=16&format=plain&rnd=new');
+</script>
+
+Reseeding using user input
+--------------------------
 
 var seed = Math.seedrandom();        // Use prng with an automatic seed.
 document.write(Math.random());       // Pretty much unpredictable x.
@@ -94,7 +112,7 @@ function reseed(event, count) {      // Define a custom entropy collector.
   var t = [];
   function w(e) {
     t.push([e.pageX, e.pageY, +new Date]);
-    if (t.length < count) { return; }
+    if (t.length &lt; count) { return; }
     document.removeEventListener(event, w);
     Math.seedrandom(t, { entropy: true });
   }
