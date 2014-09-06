@@ -1,7 +1,14 @@
 {
   "name": "seedrandom",
-  "version": "2.3.6",
   "description": "Seeded random number generator for Javascript.",
+  "main": "seedrandom.js",
+  "license": "MIT",
+  "keywords": [
+    "random",
+    "seed",
+    "crypto"
+  ],
+  "ignore": [],
   "devDependencies": {
     "qunit": "latest",
     "requirejs": "latest"
