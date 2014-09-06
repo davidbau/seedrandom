@@ -9,7 +9,7 @@
     "crypto"
   ],
   "scripts": {
-    "test": "grunt"
+    "test": "grunt travis"
   },
   "repository": {
     "type": "git",
@@ -21,12 +21,21 @@
     "url": "https://github.com/davidbau/seedrandom/issues"
   },
   "homepage": "http://davidbau.com/archives/2010/01/30/random_seeds_coded_hints_and_quintillions.html",
+  "config": {
+    "blanket": {
+      "pattern": [
+        "seedrandom.js"
+      ]
+    }
+  },
   "devDependencies": {
+    "blanket": "latest",
     "grunt": "latest",
     "grunt-bowercopy": "latest",
     "grunt-cli": "latest",
-    "grunt-contrib-uglify": "latest",
     "grunt-contrib-qunit": "latest",
+    "grunt-contrib-uglify": "latest",
+    "grunt-mocha-cov": "latest",
     "grunt-release": "latest",
     "grunt-sed": "latest",
     "phantomjs": "latest"

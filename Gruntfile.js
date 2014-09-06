@@ -42,6 +42,21 @@ module.exports = function(grunt) {
     qunit: {
       all: ["test/*.html"]
     },
+    mochacov: {
+      options: {
+        files: 'test/nodetest.js'
+      },
+      coverage: {
+        options: {
+          coveralls: true
+        }
+      },
+      test: {
+        options: {
+          reporter: 'dot'
+        }
+      }
+    },
     release: {
       options: {
         bump: false
@@ -49,12 +64,14 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-qunit');
-  grunt.loadNpmTasks('grunt-release');
   grunt.loadNpmTasks('grunt-bowercopy');
+  grunt.loadNpmTasks('grunt-contrib-qunit');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-mocha-cov');
+  grunt.loadNpmTasks('grunt-release');
   grunt.loadNpmTasks('grunt-sed');
 
-  grunt.registerTask("default", ["uglify", "sed", "qunit"]);
+  grunt.registerTask("default", ["uglify", "sed", "qunit", "mochacov:test"]);
+  grunt.registerTask("travis", ["default", "mochacov:coverage"]);
 };
 
