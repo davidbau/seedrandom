@@ -93,7 +93,7 @@ Network seeding
     s = unescape(x.response.trim().replace(/^|\s/g, '%'));
   } finally {
     // Seed with the response, or autoseed on failure.
-    Math.seedrandom(null, !!s);
+    Math.seedrandom(s, !!s);
   }
 })(new XMLHttpRequest, 'https://www.random.org/integers/' +
   '?num=256&min=0&max=255&col=1&base=16&format=plain&rnd=new');
@@ -177,7 +177,7 @@ numbers on Opera at about 0.0005 ms per seeded Math.random().
 LICENSE (MIT)
 -------------
 
-Copyright (c)2014 David Bau.
+Copyright 2014 David Bau.
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
