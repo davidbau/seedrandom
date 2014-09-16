@@ -1,4 +1,5 @@
-var seedrandom = require('../seedrandom')
+#!/usr/bin/env node
+var seedrandom = require('../seedrandom');
 
 // process.on('SIGPIPE', process.exit);
 function epipeBomb(stream, callback) {
@@ -24,14 +25,16 @@ epipeBomb();
 
 var bufsize = 1024 * 256,
     buf = new Buffer(bufsize * 4),
-    prng = seedrandom(0);
+    prng = seedrandom(0),
+    count = parseInt(process.argv[2]) || Infinity;
 function dowrite() {
-  while (true) {
+  while (count > 0) {
     for (var j = 0; j < bufsize; ++j) {
       buf.writeUInt32BE(Math.floor(
           prng() * 256 * 256 * 256 * 256
       ), j * 4);
     }
+    count -= bufsize * 32;
     if (!process.stdout.write(buf)) {
       process.stdout.once('drain', function() { setTimeout(dowrite, 0) });
       return;

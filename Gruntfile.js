@@ -44,7 +44,7 @@ module.exports = function(grunt) {
     },
     mochacov: {
       options: {
-        files: 'test/nodetest.js'
+        files: ['test/cryptotest.js', 'test/nodetest.js']
       },
       coverage: {
         options: {
