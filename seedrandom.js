@@ -213,8 +213,7 @@ var startdenom = math.pow(width, chunks),
     significance = math.pow(2, digits),
     overflow = significance * 2,
     mask = width - 1,
-    crypto,
-    Buffer,
+    crypto;
 
 //
 // seedrandom()
@@ -347,8 +346,7 @@ function autoseed(seed) {
     return tostring(seed);
   } catch (e) {
     try {
-      seed = new Uint8Array(Buffer(crypto.randomBytes(width)));
-      return tostring(seed);
+      return tostring(nodecrypto.randomBytes(width));
     } catch (ex) {
       return [+new Date, global, (seed = global.navigator) && seed.plugins,
               global.screen, tostring(pool)];
@@ -387,8 +385,7 @@ if (module && module.exports) {
 // Node.js native crypto support.
 //
 try {
-  crypto = require('crypto');
-  Buffer = require('buffer').Buffer;
+  nodecrypto = require('crypto');
 } catch(ex) {}
 
 // End anonymous scope, and pass initial values.
