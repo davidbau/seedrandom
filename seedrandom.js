@@ -5,9 +5,9 @@ seedrandom.js
 
 Seeded random number generator for Javascript.
 
-version 2.3.6
+version 2.3.7
 Author: David Bau
-Date: 2014 May 14
+Date: 2014 Sep 17
 
 Can be used as a plain script, a node.js module or an AMD module.
 
@@ -140,6 +140,7 @@ The random number sequence is the same as version 1.0 for string seeds.
 * Version 2.3.1 adds a build environment, module packaging, and tests.
 * Version 2.3.4 fixes bugs on IE8, and switches to MIT license.
 * Version 2.3.6 adds a readable options object argument.
+* Version 2.3.7 adds support for node.js crypto (by cdt1500).
 
 The standard ARC4 key scheduler cycles short keys, which means that
 seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.
