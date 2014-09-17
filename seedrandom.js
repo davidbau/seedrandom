@@ -360,14 +360,14 @@ function tostring(a) {
 //
 // When seedrandom.js is loaded, we immediately mix a few bits
 // from the built-in RNG into the entropy pool.  Because we do
-// not want to intefere with determinstic PRNG state later,
+// not want to interfere with deterministic PRNG state later,
 // seedrandom will not call math.random on its own again after
 // initialization.
 //
 mixkey(math[rngname](), pool);
 
 //
-// Nodejs and AMD support: export the implemenation as a module using
+// Nodejs and AMD support: export the implementation as a module using
 // either convention.
 //
 if (module && module.exports) {
