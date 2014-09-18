@@ -38,6 +38,7 @@
     "grunt-mocha-cov": "latest",
     "grunt-release": "latest",
     "grunt-sed": "latest",
-    "phantomjs": "latest"
+    "phantomjs": "latest",
+    "proxyquire": "git://github.com/davidbau/proxyquire.git#nullstub"
   }
 }

@@ -5,9 +5,9 @@ seedrandom.js
 
 Seeded random number generator for Javascript.
 
-version 2.3.6
+version 2.3.7
 Author: David Bau
-Date: 2014 May 14
+Date: 2014 Sep 17
 
 Can be used as a plain script, a node.js module or an AMD module.
 
@@ -140,6 +140,7 @@ The random number sequence is the same as version 1.0 for string seeds.
 * Version 2.3.1 adds a build environment, module packaging, and tests.
 * Version 2.3.4 fixes bugs on IE8, and switches to MIT license.
 * Version 2.3.6 adds a readable options object argument.
+* Version 2.3.7 adds support for node.js crypto (by ctd1500).
 
 The standard ARC4 key scheduler cycles short keys, which means that
 seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.
@@ -213,6 +214,7 @@ var startdenom = math.pow(width, chunks),
     significance = math.pow(2, digits),
     overflow = significance * 2,
     mask = width - 1,
+    nodecrypto,
 
 //
 // seedrandom()
@@ -344,8 +346,12 @@ function autoseed(seed) {
     global.crypto.getRandomValues(seed = new Uint8Array(width));
     return tostring(seed);
   } catch (e) {
-    return [+new Date, global, (seed = global.navigator) && seed.plugins,
-            global.screen, tostring(pool)];
+    try {
+      return tostring(nodecrypto.randomBytes(width));
+    } catch (ex) {
+      return [+new Date, global, (seed = global.navigator) && seed.plugins,
+              global.screen, tostring(pool)];
+    }
   }
 }
 
@@ -360,14 +366,14 @@ function tostring(a) {
 //
 // When seedrandom.js is loaded, we immediately mix a few bits
 // from the built-in RNG into the entropy pool.  Because we do
-// not want to intefere with determinstic PRNG state later,
+// not want to interfere with deterministic PRNG state later,
 // seedrandom will not call math.random on its own again after
 // initialization.
 //
 mixkey(math[rngname](), pool);
 
 //
-// Nodejs and AMD support: export the implemenation as a module using
+// Nodejs and AMD support: export the implementation as a module using
 // either convention.
 //
 if (module && module.exports) {
@@ -375,6 +381,13 @@ if (module && module.exports) {
 } else if (define && define.amd) {
   define(function() { return impl; });
 }
+
+//
+// Node.js native crypto support.
+//
+try {
+  nodecrypto = require('crypto');
+} catch(ex) {}
 
 // End anonymous scope, and pass initial values.
 })(
