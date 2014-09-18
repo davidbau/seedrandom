@@ -140,7 +140,7 @@ The random number sequence is the same as version 1.0 for string seeds.
 * Version 2.3.1 adds a build environment, module packaging, and tests.
 * Version 2.3.4 fixes bugs on IE8, and switches to MIT license.
 * Version 2.3.6 adds a readable options object argument.
-* Version 2.3.7 adds support for node.js crypto (by cdt1500).
+* Version 2.3.7 adds support for node.js crypto (by ctd1500).
 
 The standard ARC4 key scheduler cycles short keys, which means that
 seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.
@@ -214,7 +214,7 @@ var startdenom = math.pow(width, chunks),
     significance = math.pow(2, digits),
     overflow = significance * 2,
     mask = width - 1,
-    crypto;
+    nodecrypto,
 
 //
 // seedrandom()
