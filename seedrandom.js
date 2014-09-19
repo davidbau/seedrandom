@@ -344,14 +344,13 @@ function mixkey(seed, key) {
 /** @param {Uint8Array|Navigator=} seed */
 function autoseed(seed) {
   try {
+    if (nodecrypto) return tostring(nodecrypto.randomBytes(width));
     global.crypto.getRandomValues(seed = new Uint8Array(width));
     return tostring(seed);
-  } catch (e1) { try {
-    return tostring(nodecrypto.randomBytes(width));
-  } catch (e2) {
+  } catch (e) {
     return [+new Date, global, (seed = global.navigator) && seed.plugins,
       global.screen, tostring(pool)];
-  } }
+  }
 }
 
 //

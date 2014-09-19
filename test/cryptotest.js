@@ -25,6 +25,7 @@ it("should be able to seed without crypto", function() {
   assert(r != 0.9282578795792454, "Should not be 'hello.'#1");
   assert(r != 0.7316977468919549, "Should not be 'hello.'#3");
   assert(r != 0.23144008215179881, "Should not be '\\0'#1");
+  assert(r != 0.7220382488550928, "Should not be '\\1'#1");
   // Recache original seedrandom.
   proxyquire('../seedrandom', {});
 });
@@ -33,7 +34,7 @@ it("should be able to seed without crypto", function() {
 it("should be able to seed ('hello.') with zero crypto", function() {
   var zerocrypto_sr = proxyquire('../seedrandom', {
     crypto: { randomBytes: function(n) {
-      result = []; while (n-- > 0) { result.push(0); } return result; } }
+      result = []; while (n-- > 0) { result.push(1); } return result; } }
   });
   rng = zerocrypto_sr('hello.');
   assert.equal(typeof(rng), 'function', "Should return a function.");
@@ -45,9 +46,9 @@ it("should be able to seed ('hello.') with zero crypto", function() {
   assert.equal(typeof(rng), 'function', "Should return function.");
   assert(original === Math.random, "Should not change Math.random.");
   r = rng();
-  assert.equal(r, 0.23144008215179881, "Should be '\\0'#1");
+  assert.equal(r, 0.7220382488550928, "Should be '\\1'#1");
   r = rng();
-  assert.equal(r, 0.27404636548159655, "Should be '\\0'#2");
+  assert.equal(r, 0.0259971860493045, "Should be '\\1'#2");
   // Recache original seedrandom.
   proxyquire('../seedrandom', {});
 });
