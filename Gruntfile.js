@@ -40,6 +40,9 @@ module.exports = function(grunt) {
       },
     },
     qunit: {
+      options: {
+        noGlobals: true
+      },
       all: ["test/*.html"]
     },
     mochacov: {

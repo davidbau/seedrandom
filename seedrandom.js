@@ -220,7 +220,7 @@ var startdenom = math.pow(width, chunks),
 // seedrandom()
 // This is the seedrandom function described above.
 //
-impl = math['seed' + rngname] = function(seed, options, callback) {
+var impl = math['seed' + rngname] = function(seed, options, callback) {
   var key = [];
   options = (options == true) ? { entropy: true } : (options || {});
 

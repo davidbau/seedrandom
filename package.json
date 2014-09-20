@@ -33,7 +33,7 @@
     "grunt": "latest",
     "grunt-bowercopy": "latest",
     "grunt-cli": "latest",
-    "grunt-contrib-qunit": "latest",
+    "grunt-contrib-qunit": "git://github.com/gruntjs/grunt-contrib-qunit.git#master",
     "grunt-contrib-uglify": "latest",
     "grunt-mocha-cov": "latest",
     "grunt-release": "latest",
