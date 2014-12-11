@@ -6,9 +6,9 @@ seedrandom.js
 
 Seeded random number generator for Javascript.
 
-version 2.3.10<br>
+version 2.3.11<br>
 Author: David Bau<br>
-Date: 2014 Sep 20
+Date: 2014 Dec 11
 
 Can be used as a plain script, a node.js module or an AMD module.
 
@@ -17,7 +17,7 @@ Script tag usage
 ----------------
 
 <pre>
-&lt;script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.10/seedrandom.min.js&gt;
+&lt;script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.11/seedrandom.min.js&gt;
 &lt;/script&gt;
 </pre>
 
@@ -91,7 +91,7 @@ Network seeding
 ---------------
 
 <pre>
-&lt;script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.10/seedrandom.min.js&gt;
+&lt;script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.11/seedrandom.min.js&gt;
 &lt;/script&gt;
 &lt;!-- Seeds using urandom bits from a server. --&gt;
 &lt;script src=//jsonlib.appspot.com/urandom?callback=Math.seedrandom"&gt;
@@ -148,6 +148,24 @@ var obj = Math.seedrandom(null, { pass: function(prng, seed) {
 </pre>
 
 
+Saving and Restoring PRNG state
+-------------------------------
+
+<pre>
+var seedrandom = Math.seedrandom;
+var saveable = seedrandom("secret-seed", {state: true});
+for (var j = 0; j &lt; 1e5; ++j) saveable();
+var saved = saveable.state();
+var replica = seedrandom("", {state: saved});
+assert(replica() == saveable());
+</pre>
+
+In normal use the prng is opaque and its internal state cannot be accessed.
+However, if the "state" option is specified, the prng gets a state() method
+that returns a plain object the can be used to reconstruct a prng later in
+the same state (by passing that saved object back as the state option).
+
+
 Version notes
 -------------
 
@@ -161,6 +179,7 @@ The random number sequence is the same as version 1.0 for string seeds.
 * Version 2.3.4 fixes bugs on IE8, and switches to MIT license.
 * Version 2.3.6 adds a readable options object argument.
 * Version 2.3.10 adds support for node.js crypto (contributed by ctd1500).
+* Version 2.3.11 adds an option to load and save internal state.
 
 The standard ARC4 key scheduler cycles short keys, which means that
 seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.

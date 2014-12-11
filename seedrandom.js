@@ -140,8 +140,8 @@ var replica = seedrandom("", {state: saved});
 assert(replica() == saveable());
 
 In normal use the prng is opaque and its internal state cannot be accessed.
-However, if the "state" option is specified, the prng gets a state method
-that returns a plain bject the can be used to reconstruct a prng later in
+However, if the "state" option is specified, the prng gets a state() method
+that returns a plain object the can be used to reconstruct a prng later in
 the same state (by passing that saved object back as the state option).
 
 

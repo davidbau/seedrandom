@@ -1,6 +1,6 @@
 {
   "name": "seedrandom",
-  "version": "2.3.10",
+  "version": "2.3.11",
   "description": "Seeded random number generator for Javascript",
   "repository": "davidbau/seedrandom",
   "main": "seedrandom.js",
