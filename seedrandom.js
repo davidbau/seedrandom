@@ -5,16 +5,16 @@ seedrandom.js
 
 Seeded random number generator for Javascript.
 
-version 2.3.10
+version 2.3.11
 Author: David Bau
-Date: 2014 Sep 20
+Date: 2014 Dec 11
 
 Can be used as a plain script, a node.js module or an AMD module.
 
 Script tag usage
 ----------------
 
-<script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.10/seedrandom.min.js>
+<script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.11/seedrandom.min.js>
 </script>
 
 // Sets Math.random to a PRNG initialized using the given explicit seed.
@@ -76,7 +76,7 @@ require(['seedrandom'], function(seedrandom) {
 Network seeding
 ---------------
 
-<script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.10/seedrandom.min.js>
+<script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.11/seedrandom.min.js>
 </script>
 
 <!-- Seeds using urandom bits from a server. -->
@@ -129,6 +129,22 @@ var obj = Math.seedrandom(null, { pass: function(prng, seed) {
 }});
 
 
+Saving and Restoring PRNG state
+-------------------------------
+
+var seedrandom = Math.seedrandom;
+var saveable = seedrandom("secret-seed", {state: true});
+for (var j = 0; j < 1e5; ++j) saveable();
+var saved = saveable.state();
+var replica = seedrandom("", {state: saved});
+assert(replica() == saveable());
+
+In normal use the prng is opaque and its internal state cannot be accessed.
+However, if the "state" option is specified, the prng gets a state method
+that returns a plain bject the can be used to reconstruct a prng later in
+the same state (by passing that saved object back as the state option).
+
+
 Version notes
 -------------
 
@@ -141,6 +157,7 @@ The random number sequence is the same as version 1.0 for string seeds.
 * Version 2.3.4 fixes bugs on IE8, and switches to MIT license.
 * Version 2.3.6 adds a readable options object argument.
 * Version 2.3.10 adds support for node.js crypto (contributed by ctd1500).
+* Version 2.3.11 adds an option to load and save internal state.
 
 The standard ARC4 key scheduler cycles short keys, which means that
 seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.
@@ -237,11 +254,20 @@ var impl = math['seed' + rngname] = function(seed, options, callback) {
 
   // Calling convention: what to return as a function of prng, seed, is_math.
   return (options.pass || callback ||
-      // If called as a method of Math (Math.seedrandom()), mutate Math.random
-      // because that is how seedrandom.js has worked since v1.0.  Otherwise,
-      // it is a newer calling convention, so return the prng directly.
-      function(prng, seed, is_math_call) {
+      function(prng, seed, is_math_call, state) {
+        if (state) {
+          // Load the arc4 state from the given state if it has an S array.
+          if (state.S) { copy(state, arc4); }
+          // Only provide the .state method if requested via options.state.
+          prng.state = function() { return copy(arc4, {}); }
+        }
+
+        // If called as a method of Math (Math.seedrandom()), mutate
+        // Math.random because that is how seedrandom.js has worked since v1.0.
         if (is_math_call) { math[rngname] = prng; return seed; }
+
+        // Otherwise, it is a newer calling convention, so return the
+        // prng directly.
         else return prng;
       })(
 
@@ -262,7 +288,10 @@ var impl = math['seed' + rngname] = function(seed, options, callback) {
       x >>>= 1;                         //   we have exactly the desired bits.
     }
     return (n + x) / d;                 // Form the number within [0, 1).
-  }, shortseed, 'global' in options ? options.global : (this == math));
+  },
+  shortseed,
+  'global' in options ? options.global : (this == math),
+  options.state);
 };
 
 //
@@ -308,6 +337,17 @@ function ARC4(key) {
     // See http://google.com/search?q=rsa+fluhrer+response&btnI
   })(width);
 }
+
+//
+// copy()
+// Copies internal state of ARC4 to or from a plain object.
+//
+function copy(f, t) {
+  t.i = f.i;
+  t.j = f.j;
+  t.S = f.S.slice();
+  return t;
+};
 
 //
 // flatten()
