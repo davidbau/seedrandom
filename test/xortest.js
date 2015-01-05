@@ -6,7 +6,6 @@ var xsadd = require('../xor/xsadd')(1);
 var xorwow = require('../xor/xorwow')(1);
 var xs7 = require('../xor/xorshift7')(1);
 var xor4096 = require('../xor/xor4096')(1);
-// var sr = require('../seedrandom')(1);
 
 describe("XOR-Shift generator test", function() {
 
@@ -46,19 +45,18 @@ test("xorshift7", xs7,
     0.21241471533241418, 0.9957620368804783, -1678071207, 510, 261, 143);
 test("xor4096", xor4096,
     0.1520436450538547, 0.4206166828516871, 1312695376, 496, 241, 113);
-/* test("seedrandom", sr,
-    null, null, null, 523, 285, 133); */
 
 it("runs benchmarks", function() {
-  var n = 5;
-  var trials = 5;
+  var n = 2;
+  var trials = 10;
   for (var j = 0; j < trials; ++j) {
     for (var k in benchmarks) {
       var fn = benchmarks[k].rand;
+      // warmup.
+      for (var j = 0; j < 100000; ++j) fn();
       start = +new Date;
-      for (var j = 0; j < n* 1e6; ++j) {
-        fn();
-      }
+      // benchmark.
+      for (var j = 0; j < n * 1e6; ++j) fn();
       end = +new Date;
       benchmarks[k].times.push(end - start);
     }
@@ -69,8 +67,10 @@ it("runs benchmarks", function() {
   var nativetime = benchmarks.native.times[0];
   for (var k in benchmarks) {
     var time = benchmarks[k].times[0];
-    // console.log(k+ ': ' + time / n + ' nanoseconds per call, ' +
-    //   (time / nativetime).toFixed(1) + 'x native random.');
+    /*
+    console.log(k+ ': ' + time / n + ' nanoseconds per call, ' +
+       (time / nativetime).toFixed(1) + 'x native random.');
+    */
   }
 });
 
