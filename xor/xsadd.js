@@ -74,8 +74,8 @@ function impl(seed, opts) {
   prng.double = function() {
     // Use the shift seen in xsadd.c
     var top = xg.next() >>> 5,
-        bot = (xg.next() >>> 0) / ((1 << 30) * 4),
-        result = (top + bot) / (1 << 28);
+        bot = (xg.next() >>> 5) / (1 << 27),
+        result = (top + bot) / (1 << 27);
     return result;
   };
   prng.int32 = xg.next;
