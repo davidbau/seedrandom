@@ -19,8 +19,8 @@ function test(label, fn, double1, float3, int4, hc, qc, ec) {
     if (int4 != null) assert.equal(fn.int32(), int4);
     assert(fn() > 0);
     assert(fn() < 1);
-    var h = 0, q = 0, e = 0, r;
-    for (var j = 0; j < 1024; ++j) {
+    var j, h = 0, q = 0, e = 0, r, p;
+    for (j = 0; j < 1024; ++j) {
       r = fn();
       if (r < 0.5) h += 1;
       if (r < 0.25) q += 1;
@@ -30,6 +30,19 @@ function test(label, fn, double1, float3, int4, hc, qc, ec) {
       assert.equal(h, hc);
       assert.equal(q, qc);
       assert.equal(e, ec);
+      h = q = e = p = 0;
+      for (j = 0; j < 1024; ++j) {
+        r = fn.double();
+        if (r < 0.5) h += 1;
+        if (r < 0.25) q += 1;
+        if (r < 0.125) e += 1;
+        if (fn.int32() >= 0) p += 1;
+      }
+      // Sanity-check double() and int32.
+      assert(h >= 482 && h <= 543);
+      assert(q >= 226 && q <= 286);
+      assert(e >= 100 && e <= 156);
+      assert(p >= 482 && p <= 543);
     }
   });
 }
