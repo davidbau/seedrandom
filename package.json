@@ -1,8 +1,8 @@
 {
   "name": "seedrandom",
-  "version": "2.3.11",
+  "version": "2.3.12",
   "description": "Seeded random number generator for Javascript.",
-  "main": "seedrandom.js",
+  "main": "index.js",
   "keywords": [
     "random",
     "seed",

@@ -21,7 +21,12 @@ module.exports = function(grunt) {
     uglify: {
       all: {
         files: {
-          "<%= pkg.name %>.min.js": [ "<%= pkg.name %>.js" ]
+          "<%= pkg.name %>.min.js": [ "<%= pkg.name %>.js" ],
+          "xor/xor4096.min.js": [ "xor/xor4096.js" ],
+          "xor/xorshift7.min.js": [ "xor/xorshift7.js" ],
+          "xor/xorwow.min.js": [ "xor/xorwow.js" ],
+          "xor/xsadd.min.js": [ "xor/xsadd.js" ],
+          "xor/xor128.min.js": [ "xor/xor128.js" ]
         },
         options: {
           preserveComments: false,
@@ -47,7 +52,7 @@ module.exports = function(grunt) {
     },
     mochacov: {
       options: {
-        files: ['test/cryptotest.js', 'test/nodetest.js']
+        files: ['test/cryptotest.js', 'test/nodetest.js', 'test/xortest.js']
       },
       coverage: {
         options: {
