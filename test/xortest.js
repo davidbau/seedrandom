@@ -6,6 +6,7 @@ var xsadd = require('../xor/xsadd')(1);
 var xorwow = require('../xor/xorwow')(1);
 var xs7 = require('../xor/xorshift7')(1);
 var xor4096 = require('../xor/xor4096')(1);
+var tychei = require('../xor/tychei')(1);
 
 describe("XOR-Shift generator test", function() {
 
@@ -58,6 +59,8 @@ test("xorshift7", xs7,
     0.21241471533241418, 0.9957620368804783, -1678071207, 510, 261, 143);
 test("xor4096", xor4096,
     0.1520436450538547, 0.4206166828516871, 1312695376, 496, 241, 113);
+test("tychei", tychei,
+    0.7389796587542713, 0.9962434568442404, 1808020203, 500, 252, 127);
 
 it("runs benchmarks", function() {
   var n = 2;
@@ -80,10 +83,8 @@ it("runs benchmarks", function() {
   var nativetime = benchmarks.native.times[0];
   for (var k in benchmarks) {
     var time = benchmarks[k].times[0];
-    /*
     console.log(k+ ': ' + time / n + ' nanoseconds per call, ' +
        (time / nativetime).toFixed(1) + 'x native random.');
-    */
   }
 });
 
