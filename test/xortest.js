@@ -63,9 +63,9 @@ test("tychei", tychei,
     0.7389796587542713, 0.9962434568442404, 1808020203, 500, 252, 127);
 
 it("runs benchmarks", function() {
-  var n = 2;
-  var trials = 10;
-  for (var j = 0; j < trials; ++j) {
+  var n = 1;
+  var trials = 3;
+  for (var t = 0; t < trials; ++t) {
     for (var k in benchmarks) {
       var fn = benchmarks[k].rand;
       // warmup.
