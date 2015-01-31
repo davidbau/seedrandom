@@ -187,17 +187,20 @@ function mixkey(seed, key) {
 
 //
 // autoseed()
-// Returns an object for autoseeding, using window.crypto if available.
+// Returns an object for autoseeding, using window.crypto and Node crypto
+// module if available.
 //
-/** @param {Uint8Array|Navigator=} seed */
-function autoseed(seed) {
+function autoseed() {
   try {
     if (nodecrypto) return tostring(nodecrypto.randomBytes(width));
-    global.crypto.getRandomValues(seed = new Uint8Array(width));
-    return tostring(seed);
+
+    var out = new Uint8Array(width);
+    global.crypto.getRandomValues(out);
+    return tostring(out);
   } catch (e) {
-    return [+new Date, global, (seed = global.navigator) && seed.plugins,
-      global.screen, tostring(pool)];
+    var browser = global.navigator,
+        plugins = browser && browser.plugins;
+    return [+new Date, global, plugins, global.screen, tostring(pool)];
   }
 }
 
