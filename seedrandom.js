@@ -22,13 +22,16 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
 
-(function (
-    global, pool, math, width, chunks, digits, module, define, rngname) {
-
+(function (pool, math) {
 //
 // The following constants are related to IEEE 754 limits.
 //
-var startdenom = math.pow(width, chunks),
+var global = this,
+    width = 256,        // each RC4 output is 0 <= x < 256
+    chunks = 6,         // at least six RC4 outputs for each double
+    digits = 52,        // there are 52 significant digits in a double
+    rngname = 'random', // rngname: name for Math.random and Math.seedrandom
+    startdenom = math.pow(width, chunks),
     significance = math.pow(2, digits),
     overflow = significance * 2,
     mask = width - 1,
@@ -214,25 +217,18 @@ mixkey(math[rngname](), pool);
 // Nodejs and AMD support: export the implementation as a module using
 // either convention.
 //
-if (module && module.exports) {
+if ((typeof module) == 'object' && module.exports) {
   module.exports = impl;
   try {
     // When in node.js, try using crypto package for autoseeding.
     nodecrypto = require('crypto');
   } catch (ex) {}
-} else if (define && define.amd) {
+} else if ((typeof define) == 'function' && define.amd) {
   define(function() { return impl; });
 }
 
 // End anonymous scope, and pass initial values.
 })(
-  this,   // global window object
   [],     // pool: entropy pool starts empty
-  Math,   // math: package containing random, pow, and seedrandom
-  256,    // width: each RC4 output is 0 <= x < 256
-  6,      // chunks: at least six RC4 outputs for each double
-  52,     // digits: there are 52 significant digits in a double
-  (typeof module) == 'object' && module,    // present in node.js
-  (typeof define) == 'function' && define,  // present with an AMD loader
-  'random'// rngname: name for Math.random and Math.seedrandom
+  Math    // math: package containing random, pow, and seedrandom
 );
