@@ -46,7 +46,7 @@ try {
 // seedrandom()
 // This is the seedrandom function described above.
 //
-var impl = math['seed' + rngname] = function(seed, options, callback) {
+function seedrandom(seed, options, callback) {
   var key = [];
   options = (options == true) ? { entropy: true } : (options || {});
 
@@ -101,7 +101,8 @@ var impl = math['seed' + rngname] = function(seed, options, callback) {
   shortseed,
   'global' in options ? options.global : (this == math),
   options.state);
-};
+}
+math['seed' + rngname] = seedrandom;
 
 //
 // ARC4
@@ -219,16 +220,16 @@ function tostring(a) {
 // seedrandom will not call math.random on its own again after
 // initialization.
 //
-mixkey(math[rngname](), pool);
+mixkey(math.random(), pool);
 
 //
 // Nodejs and AMD support: export the implementation as a module using
 // either convention.
 //
 if ((typeof module) == 'object' && module.exports) {
-  module.exports = impl;
+  module.exports = seedrandom;
 } else if ((typeof define) == 'function' && define.amd) {
-  define(function() { return impl; });
+  define(function() { return seedrandom; });
 }
 
 // End anonymous scope, and pass initial values.
