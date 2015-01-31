@@ -37,6 +37,11 @@ var global = this,
     mask = width - 1,
     nodecrypto;
 
+try {
+  // When in node.js, try using crypto package for autoseeding.
+  nodecrypto = require('crypto');
+} catch (ex) {}
+
 //
 // seedrandom()
 // This is the seedrandom function described above.
@@ -219,10 +224,6 @@ mixkey(math[rngname](), pool);
 //
 if ((typeof module) == 'object' && module.exports) {
   module.exports = impl;
-  try {
-    // When in node.js, try using crypto package for autoseeding.
-    nodecrypto = require('crypto');
-  } catch (ex) {}
 } else if ((typeof define) == 'function' && define.amd) {
   define(function() { return impl; });
 }
