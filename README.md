@@ -4,24 +4,26 @@ seedrandom.js
 [![NPM version](https://badge.fury.io/js/seedrandom.svg)](http://badge.fury.io/js/seedrandom)
 [![Bower version](https://badge.fury.io/bo/seedrandom.svg)](http://badge.fury.io/bo/seedrandom)
 
-Seeded random number generator for Javascript.
+Seeded random number generator for JavaScript.
 
-version 2.3.11<br>
-Author: David Bau<br>
-Date: 2014 Dec 11
+Version 2.3.11
 
-Can be used as a plain script, a node.js module or an AMD module.
+Author: David Bau
+
+Date: 2014-12-11
+
+Can be used as a plain script, a Node.js module or an AMD module.
 
 
 Script tag usage
 ----------------
 
-<pre>
-&lt;script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.11/seedrandom.min.js&gt;
-&lt;/script&gt;
-</pre>
+```html
+<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.11/seedrandom.min.js">
+</script>
+```
 
-<pre>
+```js
 // Sets Math.random to a PRNG initialized using the given explicit seed.
 Math.seedrandom('hello.');
 console.log(Math.random());          // Always 0.9282578795792454
@@ -40,17 +42,17 @@ console.log(Math.random());          // As unpredictable as added entropy.
 // Use "new" to create a local prng without altering Math.random.
 var myrng = new Math.seedrandom('hello.');
 console.log(myrng());                // Always 0.9282578795792454
-</pre>
+```
 
 
 Node.js usage
 -------------
 
-<pre>
+```
 npm install seedrandom
-</pre>
+```
 
-<pre>
+```js
 // Local PRNG: does not affect Math.random.
 var seedrandom = require('seedrandom');
 var rng = seedrandom('hello.');
@@ -67,38 +69,38 @@ console.log(rng());                  // Reasonably unpredictable.
 // Mixing accumulated entropy.
 rng = seedrandom('added entropy.', { entropy: true });
 console.log(rng());                  // As unpredictable as added entropy.
-</pre>
+```
 
 
 Require.js usage
 ----------------
 
-Similar to node.js usage:
+Similar to Node.js usage:
 
-<pre>
+```
 bower install seedrandom
-</pre>
+```
 
-<pre>
+```
 require(['seedrandom'], function(seedrandom) {
   var rng = seedrandom('hello.');
   console.log(rng());                  // Always 0.9282578795792454
 });
-</pre>
+```
 
 
 Network seeding
 ---------------
 
-<pre>
-&lt;script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.11/seedrandom.min.js&gt;
-&lt;/script&gt;
-&lt;!-- Seeds using urandom bits from a server. --&gt;
-&lt;script src=//jsonlib.appspot.com/urandom?callback=Math.seedrandom"&gt;
-&lt;/script&gt;
+```html
+<script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.11/seedrandom.min.js>
+</script>
+<!-- Seeds using urandom bits from a server. -->
+<script src=//jsonlib.appspot.com/urandom?callback=Math.seedrandom>
+</script>
 
-&lt;!-- Seeds mixing in random.org bits --&gt;
-&lt;script&gt;
+<!-- Seeds mixing in random.org bits -->
+<script>
 (function(x, u, s){
   try {
     // Make a synchronous request to random.org.
@@ -111,13 +113,13 @@ Network seeding
   }
 })(new XMLHttpRequest, 'https://www.random.org/integers/' +
   '?num=256&min=0&max=255&col=1&base=16&format=plain&rnd=new');
-&lt;/script&gt;
-</pre>
+</script>
+```
 
 Reseeding using user input
 --------------------------
 
-<pre>
+```js
 var seed = Math.seedrandom();        // Use prng with an automatic seed.
 document.write(Math.random());       // Pretty much unpredictable x.
 
@@ -128,37 +130,37 @@ function reseed(event, count) {      // Define a custom entropy collector.
   var t = [];
   function w(e) {
     t.push([e.pageX, e.pageY, +new Date]);
-    if (t.length &lt; count) { return; }
+    if (t.length < count) { return; }
     document.removeEventListener(event, w);
     Math.seedrandom(t, { entropy: true });
   }
   document.addEventListener(event, w);
 }
 reseed('mousemove', 100);            // Reseed after 100 mouse moves.
-</pre>
+```
 
 The "pass" option can be used to get both the prng and the seed.
 The following returns both an autoseeded prng and the seed as an object,
 without mutating Math.random:
 
-<pre>
+```js
 var obj = Math.seedrandom(null, { pass: function(prng, seed) {
   return { random: prng, seed: seed };
 }});
-</pre>
+```
 
 
 Saving and Restoring PRNG state
 -------------------------------
 
-<pre>
+```js
 var seedrandom = Math.seedrandom;
 var saveable = seedrandom("secret-seed", {state: true});
-for (var j = 0; j &lt; 1e5; ++j) saveable();
+for (var j = 0; j < 1e5; ++j) saveable();
 var saved = saveable.state();
 var replica = seedrandom("", {state: saved});
 assert(replica() == saveable());
-</pre>
+```
 
 In normal use the prng is opaque and its internal state cannot be accessed.
 However, if the "state" option is specified, the prng gets a state() method
