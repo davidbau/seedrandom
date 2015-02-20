@@ -42,7 +42,10 @@ function copy(f, t) {
 };
 
 function impl(seed, opts) {
-  if (!seed) seed = +(new Date);
+  if (!(seed === seed | 0)) {
+    // TODO: implement array seeding.
+    throw new Error('string seeding unimplemented');
+  }
   var xg = new XorGen(seed),
       state = opts && opts.state,
       prng = function() { return (xg.next() >>> 0) / ((1 << 30) * 4); };

@@ -26,6 +26,7 @@ function XorGen(seed) {
       seed = null;
     } else {
       // TODO: implement array seeding.
+      throw new Error('string seeding unimplemented');
     }
     for (j = 1; j < 8; ++j) {
       if (S[j & 3] ^= j + imul(1812433253,
