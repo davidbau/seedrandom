@@ -22,6 +22,7 @@ module.exports = function(grunt) {
       all: {
         files: {
           "<%= pkg.name %>.min.js": [ "<%= pkg.name %>.js" ],
+          "xor/tychei.min.js": [ "xor/tychei.js" ],
           "xor/xor4096.min.js": [ "xor/xor4096.js" ],
           "xor/xorshift7.min.js": [ "xor/xorshift7.js" ],
           "xor/xorwow.min.js": [ "xor/xorwow.js" ],

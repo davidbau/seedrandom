@@ -6,11 +6,11 @@ seedrandom.js
 
 Seeded random number generator for JavaScript.
 
-Version 2.3.11
+Version 2.3.12
 
 Author: David Bau
 
-Date: 2014-12-11
+Date: 2015-02-19
 
 Can be used as a plain script, a Node.js module or an AMD module.
 
@@ -19,7 +19,7 @@ Script tag usage
 ----------------
 
 ```html
-<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.11/seedrandom.min.js">
+<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.12/seedrandom.min.js">
 </script>
 ```
 
@@ -93,7 +93,7 @@ Network seeding
 ---------------
 
 ```html
-<script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.11/seedrandom.min.js>
+<script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.12/seedrandom.min.js>
 </script>
 <!-- Seeds using urandom bits from a server. -->
 <script src=//jsonlib.appspot.com/urandom?callback=Math.seedrandom>
@@ -182,6 +182,7 @@ The random number sequence is the same as version 1.0 for string seeds.
 * Version 2.3.6 adds a readable options object argument.
 * Version 2.3.10 adds support for node.js crypto (contributed by ctd1500).
 * Version 2.3.11 adds an option to load and save internal state.
+* Version 2.3.12 adds implementations of fast xor-shift prngs.
 
 The standard ARC4 key scheduler cycles short keys, which means that
 seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.
