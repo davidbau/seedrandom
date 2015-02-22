@@ -25,7 +25,7 @@ equal(unexpected, -1);
 equal(expected, 1);
 var count = 0;
 for (var x in dummy) {
-  count += 1;
+  if (x == 'state') count += 1;
 }
 equal(count, 0);
 

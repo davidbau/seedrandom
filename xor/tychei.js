@@ -58,6 +58,7 @@ function impl(seed, opts) {
     return result;
   };
   prng.int32 = xg.next;
+  prng.quick = prng;
   if (state) {
     if (state.X) copy(state, xg);
     prng.state = function() { return copy(xg, {}); }

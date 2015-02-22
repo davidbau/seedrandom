@@ -183,7 +183,7 @@ it('should support state api.', function() {
   assert.equal(expected, 1);
   var count = 0;
   for (var x in dummy) {
-    count += 1;
+    if (x == 'state') count += 1;
   }
   assert.equal(count, 0);
 
