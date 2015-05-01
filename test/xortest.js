@@ -23,6 +23,9 @@ function test(label, alg, double1, float3, int4, hc, qc, ec, e2c) {
     assert(fn() > 0);
     assert(fn() < 1);
     assert(fn2() > 0);
+    // Internal state is visible only if requested.
+    assert(!('state' in fn));
+    assert('state' in fn2);
     var ss = fn2.state();
     var rs = fn2();
     assert(rs < 1);
@@ -66,12 +69,12 @@ test("xorwow", xorwow,
     0.8178000247146859, 0.8407576507888734, 533150816, 519, 228, 121, 123);
 test("xorshift7", xs7,
     0.21241471533241418, 0.9957620368804783, -1678071207, 510, 261, 143, 124);
-test("xor4096", xor4096,
-    0.1520436450538547, 0.4206166828516871, 1312695376, 496, 241, 113, 142);
 test("tychei", tychei,
-    0.7389796587542713, 0.9962434568442404, 1808020203, 500, 252, 127, 112);
+    0.42331440041340196, 0.9365617581643164, -884984569, 521, 242, 116, 126);
 test("seedrandom", sr,
     0.1776348083296759, 0.2160690303426236, 1397712774, 526, 282, 131, 137);
+test("xor4096", xor4096,
+    0.1520436450538547, 0.4206166828516871, 1312695376, 496, 241, 113, 142);
 
 it("runs benchmarks", function() {
   this.timeout(50000);
