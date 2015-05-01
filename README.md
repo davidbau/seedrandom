@@ -80,15 +80,15 @@ console.log(xorgen.int32());         //
 
 Besides xor4096, there are several other faster PRNGs available.
 
-|PRNG name  | Time vs native | Period, Author               |
-|-----------|----------------|------------------------------|
-|`xor128`   |  5.30 ns, 1.3x | 2^128-1, Marsaglia           |
-|`xorwow`   |  5.65 ns, 1.4x | 2^192-2^32, Marsaglia        |
-|`xorshift7`|  6.70 ns, 1.6x | 2^256-1, Panneton/L'ecuyer   |
-|`tychei`   | 11.35 ns, 2.8x | 2^127, Neves/Araujo (ChaCha) |
-|`quick`    | 12.20 ns, 3.0x | ~2^1600, Bau (ARC4)          |
-|`xor4096`  | 20.70 ns, 5.0x | 2^4096-2^32, Brent           |
-|-----------|----------------|------------------------------|
+|PRNG name  | Time vs native | Period, Author                |
+|-----------|----------------|-------------------------------|
+|`xor128`   |  5.30 ns, 1.3x | 2^128-1, Marsaglia            |
+|`xorwow`   |  5.65 ns, 1.4x | 2^192-2^32, Marsaglia         |
+|`xorshift7`|  6.70 ns, 1.6x | 2^256-1, Panneton/L'ecuyer    |
+|`tychei`   | 11.35 ns, 2.8x | ~2^127, Neves/Araujo (ChaCha) |
+|`quick`    | 12.20 ns, 3.0x | ~2^1600, Bau (ARC4)           |
+|`xor4096`  | 20.70 ns, 5.0x | 2^4096-2^32, Brent            |
+|-----------|----------------|-------------------------------|
 
 (`quick` is just the 32-bit version of the RC4-based PRNG
 originally packaged with seedrandom.)
@@ -235,7 +235,7 @@ The random number sequence is the same as version 1.0 for string seeds.
 * Version 2.3.6 adds a readable options object argument.
 * Version 2.3.10 adds support for node.js crypto (contributed by ctd1500).
 * Version 2.3.11 adds an option to load and save internal state.
-* Version 2.4.0 adds implementations of fast xor-shift prngs.
+* Version 2.4.0 adds implementations of several other fast PRNGs.
 
 The standard ARC4 key scheduler cycles short keys, which means that
 seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.
