@@ -20,7 +20,7 @@
 // implementation also provides for initalizing the generator with
 // string seeds, or for saving and restoring the state of the generator.
 //
-// On Chrome, this prng benchmarks about 4.5 times slower than
+// On Chrome, this prng benchmarks about 2.1 times slower than
 // Javascript's built-in Math.random().
 
 (function(global, module, define) {

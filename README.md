@@ -6,11 +6,11 @@ seedrandom.js
 
 Seeded random number generator for JavaScript.
 
-Version 2.3.12
+Version 2.4.0
 
 Author: David Bau
 
-Date: 2015-02-19
+Date: 2015-05-02
 
 Can be used as a plain script, a Node.js module or an AMD module.
 
@@ -19,7 +19,7 @@ Script tag usage
 ----------------
 
 ```html
-<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.12/seedrandom.min.js">
+<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.0/seedrandom.min.js">
 </script>
 ```
 
@@ -42,7 +42,56 @@ console.log(Math.random());          // As unpredictable as added entropy.
 // Use "new" to create a local prng without altering Math.random.
 var myrng = new Math.seedrandom('hello.');
 console.log(myrng());                // Always 0.9282578795792454
+
+// Use "quick" to get only 32 bits of randomness in a float.
+console.log(myrng.quick());          // Always 0.3752569768112153
+
+// Use "int32" to get a 32 bit (signed) integer
+console.log(myrng.int32());          // Always 986220731
+
 ```
+
+Other Fast PRNG Algorithms
+--------------------------
+
+The package includes some other fast PRNGs.  To use Richard Brent's
+xorgens-4096 PRNG:
+
+
+```html
+<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.0/prng/xor4096.min.js">
+</script>
+```
+
+```js
+// Use xor4096 for Richard Brent's xorgens-4096 algorithm.
+var xorgen = new xor4096('hello.');
+
+// By default provides 32 bits of randomness in a float.
+console.log(xorgen());               //
+
+// Use "double" to get 56 bits of randomness.
+console.log(xorgen.double());        //
+
+// Use "int32" to get a 32 bit (signed) integer.
+console.log(xorgen.int32());         //
+
+````
+
+Besides xor4096, there are several other faster PRNGs available.
+
+|PRNG name  | Time vs native | Period, Author               |
+|-----------|----------------|------------------------------|
+|`xor128`   |  5.30 ns, 1.3x | 2^128-1, Marsaglia           |
+|`xorwow`   |  5.65 ns, 1.4x | 2^192-2^32, Marsaglia        |
+|`xorshift7`|  6.70 ns, 1.6x | 2^256-1, Panneton/L'ecuyer   |
+|`tychei`   | 11.35 ns, 2.8x | 2^127, Neves/Araujo (ChaCha) |
+|`quick`    | 12.20 ns, 3.0x | ~2^1600, Bau (ARC4)          |
+|`xor4096`  | 20.70 ns, 5.0x | 2^4096-2^32, Brent           |
+|-----------|----------------|------------------------------|
+
+(`quick` is just the 32-bit version of the RC4-based PRNG
+originally packaged with seedrandom.)
 
 
 Node.js usage
@@ -69,6 +118,10 @@ console.log(rng());                  // Reasonably unpredictable.
 // Mixing accumulated entropy.
 rng = seedrandom('added entropy.', { entropy: true });
 console.log(rng());                  // As unpredictable as added entropy.
+
+// Using alternate algorithms, as listed above.
+var rng2 = seedrandom.xor4096('hello.')
+console.log(rng2());
 ```
 
 
@@ -93,7 +146,7 @@ Network seeding
 ---------------
 
 ```html
-<script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.12/seedrandom.min.js>
+<script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.0/seedrandom.min.js>
 </script>
 <!-- Seeds using urandom bits from a server. -->
 <script src=//jsonlib.appspot.com/urandom?callback=Math.seedrandom>
@@ -182,7 +235,7 @@ The random number sequence is the same as version 1.0 for string seeds.
 * Version 2.3.6 adds a readable options object argument.
 * Version 2.3.10 adds support for node.js crypto (contributed by ctd1500).
 * Version 2.3.11 adds an option to load and save internal state.
-* Version 2.3.12 adds implementations of fast xor-shift prngs.
+* Version 2.4.0 adds implementations of fast xor-shift prngs.
 
 The standard ARC4 key scheduler cycles short keys, which means that
 seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.

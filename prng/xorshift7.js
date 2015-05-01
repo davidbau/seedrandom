@@ -25,7 +25,7 @@ function XorGen(seed) {
   function init(me, seed) {
     var j, w, X = [];
 
-    if (seed === seed | 0) {
+    if (seed === (seed | 0)) {
       // Seed state array using a 32-bit integer.
       w = X[0] = seed;
     } else {
@@ -53,6 +53,12 @@ function XorGen(seed) {
   init(me, seed);
 }
 
+function copy(f, t) {
+  t.x = f.x.slice();
+  t.i = f.i;
+  return t;
+}
+
 function impl(seed, opts) {
   if (seed == null) seed = +(new Date);
   var xg = new XorGen(seed),
@@ -69,7 +75,7 @@ function impl(seed, opts) {
   prng.int32 = xg.next;
   prng.quick = prng;
   if (state) {
-    if (state.X) copy(state, xg);
+    if (state.x) copy(state, xg);
     prng.state = function() { return copy(xg, {}); }
   }
   return prng;

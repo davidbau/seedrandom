@@ -5,7 +5,7 @@
 (function(global, module, define) {
 
 function XorGen(seed) {
-  var me = this;
+  var me = this, strseed = '';
 
   // Set up generator function.
   me.next = function() {
@@ -16,36 +16,39 @@ function XorGen(seed) {
     a = (a - b) | 0;
     me.b = b = (b << 20) ^ (b >>> 12) ^ c;
     me.c = (c - d) | 0;
-    me.d = d = (d << 16) ^ (c >>> 16) ^ a;
+    me.d = (d << 16) ^ (c >>> 16) ^ a;
     return me.a = (a - b) | 0;
   };
 
-  function init(me, seed) {
-    me.a = seed | 0;
-    me.b = (seed / ((1 << 30) * 4)) | 0;
-    me.c = 2654435769 | 0;
-    me.d = 1367130551;
-    // Discard an initial batch of 20 values.
-    for (var k = 20; k > 0; --k) {
-      me.next();
-    }
+  me.a = 0;
+  me.b = 0;
+  me.c = 2654435769 | 0;
+  me.d = 1367130551;
+
+  if (seed === (seed | 0)) {
+    // Integer seed.
+    me.a = seed;
+  } else {
+    // String seed.
+    strseed += seed;
   }
 
-  init(me, seed);
+  // Mix in string seed, then discard an initial batch of 64 values.
+  for (var k = 0; k < strseed.length + 20; k++) {
+    me.a ^= strseed.charCodeAt(k) | 0;
+    me.next();
+  }
 }
 
 function copy(f, t) {
-  t.i = f.i;
-  t.w = f.w;
-  t.X = f.X.slice();
+  t.a = f.a;
+  t.b = f.b;
+  t.c = f.c;
+  t.d = f.d;
   return t;
 };
 
 function impl(seed, opts) {
-  if (!(seed === seed | 0)) {
-    // TODO: implement array seeding.
-    throw new Error('string seeding unimplemented');
-  }
   var xg = new XorGen(seed),
       state = opts && opts.state,
       prng = function() { return (xg.next() >>> 0) / ((1 << 30) * 4); };
@@ -60,7 +63,7 @@ function impl(seed, opts) {
   prng.int32 = xg.next;
   prng.quick = prng;
   if (state) {
-    if (state.X) copy(state, xg);
+    if (typeof(state) == 'object') copy(state, xg);
     prng.state = function() { return copy(xg, {}); }
   }
   return prng;

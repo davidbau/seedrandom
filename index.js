@@ -28,7 +28,6 @@
 //
 //            speed  period       BigCrush failures
 // xor128     1.7x   2^128-1      MatrixRank, LinearComp
-// xsadd      1.9x   2^128-1      several when bits are reversed
 // xorwow     1.9x   2^192-2^32   CollisionOver, SimpPoker, LinearComp
 // xorshift7  2.1x   2^256-1      none
 // xor4096    2.1x   2^4128-2^32  none
@@ -43,7 +42,7 @@
 // var i = rng.int32();
 //
 // If using one of these algorithms in the browser, you can
-// include the code directly under the /xor/ directory to avoid
+// include the code directly under the /prng/ directory to avoid
 // pulling in code for the other algorithms.
 //
 // Background on these fast xor-based algorithms.
@@ -71,29 +70,13 @@
 // A pure xor-shift generator by George Marsaglia.
 // Period: 2^128-1.
 // Reported to fail: MatrixRank and LinearComp.
-var xor128 = require('./xor/xor128');
+var xor128 = require('./prng/xor128');
 
 // xorwow: 29.6 nanoseconds per call, 1.9x native random.
 // George Marsaglia's 160-bit xor-shift combined plus weyl.
 // Period: 2^192-2^32
 // Reported to fail: CollisionOver, SimpPoker, and LinearComp.
-var xorwow = require('./xor/xorwow');
-
-// xsadd adds robustness through an addition step; it was
-// proposed by Mutsuo Saito and Makoto Matsumoto (author of MT19937)
-// (http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/XSADD/index.html),
-// and it passes all BigCrush tests; although it fails some if
-// bits are reversed.  Sebastiano Vigna recently proposed another
-// algorithm based on this idea, "xorshift128+", which fixes
-// weaknesses in the lower bits; unfortunatly, that improved
-// algorithm requires 64-bit arithmatic and is not fast in Javascript.
-
-// xsadd: 28.9 nanoseconds per call, 1.9x native random.
-// Mutsuo Saito and Makoto Matsumoto's xorshift with an addition.
-// Period: 2^128-1.
-// Fails no tests in normal mode.
-// Fails when bits reversed: LinearComp, MatrixRank, MaxOft, Permutation.
-var xsadd = require('./xor/xsadd');
+var xorwow = require('./prng/xorwow');
 
 // xorshift7, by François Panneton and Pierre L'ecuyer, takes
 // a different approach: it adds robustness by allowing more shifts
@@ -104,7 +87,7 @@ var xsadd = require('./xor/xsadd');
 // François Panneton & Pierre L'ecuyer's 7-shift generator with 256 bits.
 // Period 2^256-1.
 // No systematic BigCrush failures reported.
-var xorshift7 = require('./xor/xorshift7');
+var xorshift7 = require('./prng/xorshift7');
 
 // xor4096, by Richard Brent, is a 4096-bit xor-shift with a
 // very long period that also adds a Weyl generator. It also passes
@@ -116,7 +99,7 @@ var xorshift7 = require('./xor/xorshift7');
 // Richard Brent's 4096-bit "xorgens" xor shift plus weyl.
 // Period: 2^4128-2^32.
 // No systematic BigCrush failures reported.
-var xor4096 = require('./xor/xor4096');
+var xor4096 = require('./prng/xor4096');
 
 // Tyche-i, by Samuel Neves and Filipe Araujo, is a bit-shifting random
 // number generator derived from ChaCha, a modern stream cipher.
@@ -126,11 +109,10 @@ var xor4096 = require('./xor/xor4096');
 // Richard Brent's 4096-bit "xorgens" xor shift plus weyl.
 // Period: 2^4128-2^32.
 // No systematic BigCrush failures reported.
-var tychei = require('./xor/tychei');
+var tychei = require('./prng/tychei');
 
 var sr = require('./seedrandom');
 sr.xor128 = xor128;
-sr.xsadd = xsadd;
 sr.xorwow = xorwow;
 sr.xorshift7 = xorshift7;
 sr.xor4096 = xor4096;

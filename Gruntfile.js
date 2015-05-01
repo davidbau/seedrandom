@@ -22,12 +22,11 @@ module.exports = function(grunt) {
       all: {
         files: {
           "<%= pkg.name %>.min.js": [ "<%= pkg.name %>.js" ],
-          "xor/tychei.min.js": [ "xor/tychei.js" ],
-          "xor/xor4096.min.js": [ "xor/xor4096.js" ],
-          "xor/xorshift7.min.js": [ "xor/xorshift7.js" ],
-          "xor/xorwow.min.js": [ "xor/xorwow.js" ],
-          "xor/xsadd.min.js": [ "xor/xsadd.js" ],
-          "xor/xor128.min.js": [ "xor/xor128.js" ]
+          "prng/tychei.min.js": [ "prng/tychei.js" ],
+          "prng/xor4096.min.js": [ "prng/xor4096.js" ],
+          "prng/xorshift7.min.js": [ "prng/xorshift7.js" ],
+          "prng/xorwow.min.js": [ "prng/xorwow.js" ],
+          "prng/xor128.min.js": [ "prng/xor128.js" ]
         },
         options: {
           preserveComments: false,

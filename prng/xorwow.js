@@ -1,10 +1,10 @@
-// A Javascript implementaion of the "xor128" prng algorithm by
+// A Javascript implementaion of the "xorwow" prng algorithm by
 // George Marsaglia.  See http://www.jstatsoft.org/v08/i14/paper
 
 (function(global, module, define) {
 
 function XorGen(seed) {
-  var me = this;
+  var me = this, strseed = '';
 
   // Set up generator function.
   me.next = function() {
@@ -14,27 +14,41 @@ function XorGen(seed) {
        (me.v = (me.v ^ (me.v << 4)) ^ (t ^ (t << 1))) | 0;
   };
 
-  function init(me, seed) {
+  me.x = 0;
+  me.y = 0;
+  me.z = 0;
+  me.w = 0;
+  me.v = 0;
+
+  if (seed === (seed | 0)) {
+    // Integer seed.
     me.x = seed;
-    me.y = 0;
-    me.z = 0;
-    me.w = 0;
-    me.v = 0;
-    me.d = seed << 10 ^ seed >>> 4;
-    // Discard an initial batch of 64 values.
-    for (var k = 64; k > 0; --k) {
-      me.next();
-    }
+  } else {
+    // String seed.
+    strseed += seed;
   }
 
-  init(me, seed);
+  // Mix in string seed, then discard an initial batch of 64 values.
+  for (var k = 0; k < strseed.length + 64; k++) {
+    me.x ^= strseed.charCodeAt(k) | 0;
+    if (k == strseed.length) {
+      me.d = me.x << 10 ^ me.x >>> 4;
+    }
+    me.next();
+  }
+}
+
+function copy(f, t) {
+  t.x = f.x;
+  t.y = f.y;
+  t.z = f.z;
+  t.w = f.w;
+  t.v = f.v;
+  t.d = f.d;
+  return t;
 }
 
 function impl(seed, opts) {
-  if (!(seed === seed | 0)) {
-    // TODO: implement array seeding.
-    throw new Error('string seeding unimplemented');
-  }
   var xg = new XorGen(seed),
       state = opts && opts.state,
       prng = function() { return (xg.next() >>> 0) / ((1 << 30) * 4); };
@@ -49,7 +63,7 @@ function impl(seed, opts) {
   prng.int32 = xg.next;
   prng.quick = prng;
   if (state) {
-    if (state.X) copy(state, xg);
+    if (typeof(state) == 'object') copy(state, xg);
     prng.state = function() { return copy(xg, {}); }
   }
   return prng;

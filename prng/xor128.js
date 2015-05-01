@@ -4,7 +4,12 @@
 (function(global, module, define) {
 
 function XorGen(seed) {
-  var me = this;
+  var me = this, strseed = '';
+
+  me.x = 0;
+  me.y = 0;
+  me.z = 0;
+  me.w = 0;
 
   // Set up generator function.
   me.next = function() {
@@ -15,25 +20,30 @@ function XorGen(seed) {
     return me.w ^= (me.w >>> 19) ^ t ^ (t >>> 8);
   };
 
-  function init(me, seed) {
+  if (seed === (seed | 0)) {
+    // Integer seed.
     me.x = seed;
-    me.y = 0;
-    me.z = 0;
-    me.w = 0;
-    // Discard an initial batch of 64 values.
-    for (var k = 64; k > 0; --k) {
-      me.next();
-    }
+  } else {
+    // String seed.
+    strseed += seed;
   }
 
-  init(me, seed);
+  // Mix in string seed, then discard an initial batch of 64 values.
+  for (var k = 0; k < strseed.length + 64; k++) {
+    me.x ^= strseed.charCodeAt(k) | 0;
+    me.next();
+  }
+}
+
+function copy(f, t) {
+  t.x = f.x;
+  t.y = f.y;
+  t.z = f.z;
+  t.w = f.w;
+  return t;
 }
 
 function impl(seed, opts) {
-  if (!(seed === seed | 0)) {
-    // TODO: implement array seeding.
-    throw new Error('string seeding unimplemented');
-  }
   var xg = new XorGen(seed),
       state = opts && opts.state,
       prng = function() { return (xg.next() >>> 0) / ((1 << 30) * 4); };
@@ -48,7 +58,7 @@ function impl(seed, opts) {
   prng.int32 = xg.next;
   prng.quick = prng;
   if (state) {
-    if (state.X) copy(state, xg);
+    if (typeof(state) == 'object') copy(state, xg);
     prng.state = function() { return copy(xg, {}); }
   }
   return prng;

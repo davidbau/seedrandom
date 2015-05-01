@@ -58,6 +58,12 @@ r = myrng();
 ok(true, "Got " + r);
 equal(r, 0.9282578795792454, "Should be 'hello.'#1");
 
+// Use "quick" to get only 32 bits of randomness in a float.
+equal(myrng.quick(), 0.3752569768112153, "Should be quick #1.1");
+
+// Use "int32" to get a 32 bit (signed) integer
+equal(myrng.int32(), 986220731, "Should be int32 #1.2");
+
 // As if brought in by node.js
 var seedrandom = Math.seedrandom;
 
