@@ -1,11 +1,11 @@
 // A simple smoke test and benchmark for the generators.
 
 var assert = require('assert');
-var xor128 = require('../prng/xor128');
-var xorwow = require('../prng/xorwow');
-var xs7 = require('../prng/xorshift7');
-var xor4096 = require('../prng/xor4096');
-var tychei = require('../prng/tychei');
+var xor128 = require('../lib/xor128');
+var xorwow = require('../lib/xorwow');
+var xs7 = require('../lib/xorshift7');
+var xor4096 = require('../lib/xor4096');
+var tychei = require('../lib/tychei');
 var sr = require('../seedrandom');
 
 describe("XOR-Shift generator test", function() {

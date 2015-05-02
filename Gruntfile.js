@@ -22,11 +22,11 @@ module.exports = function(grunt) {
       all: {
         files: {
           "<%= pkg.name %>.min.js": [ "<%= pkg.name %>.js" ],
-          "prng/tychei.min.js": [ "prng/tychei.js" ],
-          "prng/xor4096.min.js": [ "prng/xor4096.js" ],
-          "prng/xorshift7.min.js": [ "prng/xorshift7.js" ],
-          "prng/xorwow.min.js": [ "prng/xorwow.js" ],
-          "prng/xor128.min.js": [ "prng/xor128.js" ]
+          "lib/tychei.min.js": [ "lib/tychei.js" ],
+          "lib/xor4096.min.js": [ "lib/xor4096.js" ],
+          "lib/xorshift7.min.js": [ "lib/xorshift7.js" ],
+          "lib/xorwow.min.js": [ "lib/xorwow.js" ],
+          "lib/xor128.min.js": [ "lib/xor128.js" ]
         },
         options: {
           preserveComments: false,
@@ -52,7 +52,7 @@ module.exports = function(grunt) {
     },
     mochacov: {
       options: {
-        files: ['test/cryptotest.js', 'test/nodetest.js', 'test/xortest.js']
+        files: ['test/cryptotest.js', 'test/nodetest.js', 'test/prngtest.js']
       },
       coverage: {
         options: {

@@ -59,7 +59,7 @@ xorgens-4096 PRNG:
 
 
 ```html
-<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.0/prng/xor4096.min.js">
+<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.0/lib/xor4096.min.js">
 </script>
 ```
 
@@ -80,15 +80,14 @@ console.log(xorgen.int32());         //
 
 Besides xor4096, there are several other faster PRNGs available.
 
-|PRNG name  | Time vs native | Period, Author                |
-|-----------|----------------|-------------------------------|
-|`xor128`   |  5.30 ns, 1.3x | 2^128-1, Marsaglia            |
-|`xorwow`   |  5.65 ns, 1.4x | 2^192-2^32, Marsaglia         |
-|`xorshift7`|  6.70 ns, 1.6x | 2^256-1, Panneton/L'ecuyer    |
-|`tychei`   | 11.35 ns, 2.8x | ~2^127, Neves/Araujo (ChaCha) |
-|`quick`    | 12.20 ns, 3.0x | ~2^1600, Bau (ARC4)           |
-|`xor4096`  | 20.70 ns, 5.0x | 2^4096-2^32, Brent            |
-|-----------|----------------|-------------------------------|
+|PRNG name  | Time vs native | Period      | Author               |
+|-----------|----------------|-------------|----------------------|
+|`xor128`   |  5.30 ns, 1.3x | 2^128-1     | Marsaglia            |
+|`xorwow`   |  5.65 ns, 1.4x | 2^192-2^32  | Marsaglia            |
+|`xorshift7`|  6.70 ns, 1.6x | 2^256-1     | Panneton/L'ecuyer    |
+|`tychei`   | 11.35 ns, 2.8x | ~2^127      | Neves/Araujo (ChaCha)|
+|`quick`    | 12.20 ns, 3.0x | ~2^1600     | Bau (ARC4)           |
+|`xor4096`  | 20.70 ns, 5.0x | 2^4096-2^32 | Brent (xorgens)      |
 
 (`quick` is just the 32-bit version of the RC4-based PRNG
 originally packaged with seedrandom.)
@@ -264,7 +263,7 @@ Chrome 25 on a 2010 vintage macbook):
 * seedrandom('explicit.', true) - avg less than 0.2 milliseconds per call
 * seedrandom() with crypto      - avg less than 0.2 milliseconds per call
 
-Autoseeding without crypto is somewhat slower, about 20-30 milliseconds on
+Autoseeding without crypto is somewhat slow, about 20-30 milliseconds on
 a 2012 windows 7 1.5ghz i5 laptop, as seen on Firefox 19, IE 10, and Opera.
 Seeded rng calls themselves are fast across these browsers, with slowest
 numbers on Opera at about 0.0005 ms per seeded Math.random().
@@ -273,7 +272,7 @@ numbers on Opera at about 0.0005 ms per seeded Math.random().
 LICENSE (MIT)
 -------------
 
-Copyright 2014 David Bau.
+Copyright 2015 David Bau.
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

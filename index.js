@@ -10,12 +10,12 @@
 // xor128, a pure xor-shift generator by George Marsaglia.
 // Period: 2^128-1.
 // Reported to fail: MatrixRank and LinearComp.
-var xor128 = require('./prng/xor128');
+var xor128 = require('./lib/xor128');
 
 // xorwow, George Marsaglia's 160-bit xor-shift combined plus weyl.
 // Period: 2^192-2^32
 // Reported to fail: CollisionOver, SimpPoker, and LinearComp.
-var xorwow = require('./prng/xorwow');
+var xorwow = require('./lib/xorwow');
 
 // xorshift7, by François Panneton and Pierre L'ecuyer, takes
 // a different approach: it adds robustness by allowing more shifts
@@ -23,7 +23,7 @@ var xorwow = require('./prng/xorwow');
 // with 256 bits, that passes BigCrush with no systmatic failures.
 // Period 2^256-1.
 // No systematic BigCrush failures reported.
-var xorshift7 = require('./prng/xorshift7');
+var xorshift7 = require('./lib/xorshift7');
 
 // xor4096, by Richard Brent, is a 4096-bit xor-shift with a
 // very long period that also adds a Weyl generator. It also passes
@@ -32,14 +32,14 @@ var xorshift7 = require('./prng/xorshift7');
 // collisions.
 // Period: 2^4128-2^32.
 // No systematic BigCrush failures reported.
-var xor4096 = require('./prng/xor4096');
+var xor4096 = require('./lib/xor4096');
 
 // Tyche-i, by Samuel Neves and Filipe Araujo, is a bit-shifting random
 // number generator derived from ChaCha, a modern stream cipher.
 // https://eden.dei.uc.pt/~sneves/pubs/2011-snfa2.pdf
 // Period: ~2^127
 // No systematic BigCrush failures reported.
-var tychei = require('./prng/tychei');
+var tychei = require('./lib/tychei');
 
 // The original ARC4-based prng included in this library.
 // Period: ~2^1600
