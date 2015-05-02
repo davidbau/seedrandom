@@ -24,7 +24,12 @@
   "config": {
     "blanket": {
       "pattern": [
-        "seedrandom.js"
+        "seedrandom.js",
+        "lib/xor128.js",
+        "lib/xorwow.js",
+        "lib/xorshift7.js",
+        "lib/tychei.js",
+        "lib/xor4096.js"
       ]
     }
   },
