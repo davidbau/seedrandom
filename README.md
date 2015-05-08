@@ -68,14 +68,13 @@ xorgens-4096 PRNG:
 var xorgen = new xor4096('hello.');
 
 // By default provides 32 bits of randomness in a float.
-console.log(xorgen());               //
+console.log(xorgen());               // Always 0.9798525865189731
 
 // Use "double" to get 56 bits of randomness.
-console.log(xorgen.double());        //
+console.log(xorgen.double());        // Always 0.03583478477375346
 
 // Use "int32" to get a 32 bit (signed) integer.
-console.log(xorgen.int32());         //
-
+console.log(xorgen.int32());         // Always 1341429986
 ````
 
 Besides xor4096, there are several other faster PRNGs available.
