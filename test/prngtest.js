@@ -5,6 +5,8 @@ var xor128 = require('../lib/xor128');
 var xorwow = require('../lib/xorwow');
 var xs7 = require('../lib/xorshift7');
 var xor4096 = require('../lib/xor4096');
+var xor2003 = require('../lib/xor2003');
+var mrg32k3a = require('../lib/mrg32k3a');
 var tychei = require('../lib/tychei');
 var sr = require('../seedrandom');
 
@@ -38,7 +40,7 @@ function test(label, alg, double1, float3, int4, hc, qc, ec, e2c) {
       r2 = fn2();
       if (r2 < 0.125) e2 += 1;
     }
-    if (hc !== null) {
+    if (hc != null) {
       assert.equal(h, hc);
       assert.equal(q, qc);
       assert.equal(e, ec);
@@ -75,12 +77,14 @@ test("seedrandom", sr,
     0.1776348083296759, 0.2160690303426236, 1397712774, 526, 282, 131, 137);
 test("xor4096", xor4096,
     0.1520436450538547, 0.4206166828516871, 1312695376, 496, 241, 113, 142);
+test("xor2003", xor2003);
+test("mrg32k3a", mrg32k3a);
 
 it("runs benchmarks", function() {
   this.timeout(50000);
   this.slow(10000);
-  var n = 1;
-  var trials = 10;
+  var n = 5;
+  var trials = 100;
   var fn, k, start, end, j, t;
   for (k in benchmarks) {
     fn = benchmarks[k].rand;
