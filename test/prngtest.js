@@ -6,6 +6,7 @@ var xorwow = require('../lib/xorwow');
 var xs7 = require('../lib/xorshift7');
 var xor4096 = require('../lib/xor4096');
 var tychei = require('../lib/tychei');
+var alea = require('../lib/alea');
 var sr = require('../seedrandom');
 
 describe("XOR-Shift generator test", function() {
@@ -38,7 +39,7 @@ function test(label, alg, double1, float3, int4, hc, qc, ec, e2c) {
       r2 = fn2();
       if (r2 < 0.125) e2 += 1;
     }
-    if (hc !== null) {
+    if (hc != null) {
       assert.equal(h, hc);
       assert.equal(q, qc);
       assert.equal(e, ec);
@@ -75,12 +76,15 @@ test("seedrandom", sr,
     0.1776348083296759, 0.2160690303426236, 1397712774, 526, 282, 131, 137);
 test("xor4096", xor4096,
     0.1520436450538547, 0.4206166828516871, 1312695376, 496, 241, 113, 142);
+test("alea", alea,
+    0.5260470956849501, 0.47771977609954774, -1625913352, 494, 246, 125, 122);
 
 it("runs benchmarks", function() {
-  this.timeout(50000);
-  this.slow(10000);
-  var n = 1;
+  var n = 4;
   var trials = 10;
+  var top = 4;
+  this.timeout(200 * n * trials);
+  this.slow(30 * n * trials);
   var fn, k, start, end, j, t;
   for (k in benchmarks) {
     fn = benchmarks[k].rand;
@@ -101,7 +105,11 @@ it("runs benchmarks", function() {
     benchmarks[k].times.sort();
   }
   function fastest(array) {
-    return (array[0] + array[1] + array[2] + array[3]) / 4;
+    var sum = 0;
+    for (var j = 0; j < top; ++j) {
+       sum += array[j];
+    }
+    return sum / top;
   }
   var nativetime = fastest(benchmarks.native.times);
   for (k in benchmarks) {

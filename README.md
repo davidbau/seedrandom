@@ -68,28 +68,29 @@ xorgens-4096 PRNG:
 var xorgen = new xor4096('hello.');
 
 // By default provides 32 bits of randomness in a float.
-console.log(xorgen());               //
+console.log(xorgen());               // Always 0.9798525865189731
 
 // Use "double" to get 56 bits of randomness.
-console.log(xorgen.double());        //
+console.log(xorgen.double());        // Always 0.03583478477375346
 
 // Use "int32" to get a 32 bit (signed) integer.
-console.log(xorgen.int32());         //
-
+console.log(xorgen.int32());         // Always 1341429986
 ````
 
 Besides xor4096, there are several other faster PRNGs available.
 
 |PRNG name  | Time vs native | Period      | Author               |
 |-----------|----------------|-------------|----------------------|
-|`xor128`   |  5.30 ns, 1.3x | 2^128-1     | Marsaglia            |
-|`xorwow`   |  5.65 ns, 1.4x | 2^192-2^32  | Marsaglia            |
-|`xorshift7`|  6.70 ns, 1.6x | 2^256-1     | Panneton/L'ecuyer    |
-|`tychei`   | 11.35 ns, 2.8x | ~2^127      | Neves/Araujo (ChaCha)|
-|`quick`    | 12.20 ns, 3.0x | ~2^1600     | Bau (ARC4)           |
-|`xor4096`  | 20.70 ns, 5.0x | 2^4096-2^32 | Brent (xorgens)      |
+|`alea`     |  1.95 ns, 0.9x | ~2^116      | Baggoe               |
+|`xor128`   |  2.04 ns, 0.9x | 2^128-1     | Marsaglia            |
+|`tychei`   |  2.32 ns, 1.1x | ~2^127      | Neves/Araujo (ChaCha)|
+|`xorwow`   |  2.40 ns, 1.1x | 2^192-2^32  | Marsaglia            |
+|`xor4096`  |  2.40 ns, 1.1x | 2^4096-2^32 | Brent (xorgens)      |
+|`xorshift7`|  2.64 ns, 1.3x | 2^256-1     | Panneton/L'ecuyer    |
+|`quick`    |  3.80 ns, 1.8x | ~2^1600     | Bau (ARC4)           |
 
-(`quick` is just the 32-bit version of the RC4-based PRNG
+(Timings were done on node v0.12.2 on a single-core Google Compute Engine
+instance.  `quick` is just the 32-bit version of the RC4-based PRNG
 originally packaged with seedrandom.)
 
 
