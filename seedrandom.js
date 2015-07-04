@@ -73,7 +73,7 @@ function seedrandom(seed, options, callback) {
   };
 
   prng.int32 = function() { return arc4.g(4) | 0; }
-  prng.quick = function() { return arc4.g(4) / ((1 << 30) * 4); }
+  prng.quick = function() { return arc4.g(4) / 0x100000000; }
   prng.double = prng;
 
   // Mix the randomness into accumulated entropy.
