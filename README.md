@@ -6,11 +6,11 @@ seedrandom.js
 
 Seeded random number generator for JavaScript.
 
-Version 2.4.0
+Version 2.4.2
 
 Author: David Bau
 
-Date: 2015-05-02
+Date: 2015-07-04
 
 Can be used as a plain script, a Node.js module or an AMD module.
 
@@ -81,7 +81,7 @@ Besides xor4096, there are several other faster PRNGs available.
 
 |PRNG name  | Time vs native | Period      | Author               |
 |-----------|----------------|-------------|----------------------|
-|`alea`     |  1.95 ns, 0.9x | ~2^116      | Baggoe               |
+|`alea`     |  1.95 ns, 0.9x | ~2^116      | Baagoe               |
 |`xor128`   |  2.04 ns, 0.9x | 2^128-1     | Marsaglia            |
 |`tychei`   |  2.32 ns, 1.1x | ~2^127      | Neves/Araujo (ChaCha)|
 |`xorwow`   |  2.40 ns, 1.1x | 2^192-2^32  | Marsaglia            |
@@ -236,6 +236,7 @@ The random number sequence is the same as version 1.0 for string seeds.
 * Version 2.3.10 adds support for node.js crypto (contributed by ctd1500).
 * Version 2.3.11 adds an option to load and save internal state.
 * Version 2.4.0 adds implementations of several other fast PRNGs.
+* Version 2.4.2 adds an implementation of Baagoe's very fast Alea PRNG.
 
 The standard ARC4 key scheduler cycles short keys, which means that
 seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.
