@@ -7,6 +7,11 @@
 // var x = random();       // 0 <= x < 1.  Every bit is random.
 // var x = random.quick(); // 0 <= x < 1.  32 bits of randomness.
 
+// alea, a 53-bit multiply-with-carry generator by Johannes Baagøe.
+// Period: ~2^116
+// Reported to pass all BigCrush tests.
+var alea = require('./lib/alea');
+
 // xor128, a pure xor-shift generator by George Marsaglia.
 // Period: 2^128-1.
 // Reported to fail: MatrixRank and LinearComp.
@@ -45,6 +50,7 @@ var tychei = require('./lib/tychei');
 // Period: ~2^1600
 var sr = require('./seedrandom');
 
+sr.alea = alea;
 sr.xor128 = xor128;
 sr.xorwow = xorwow;
 sr.xorshift7 = xorshift7;
