@@ -1,16 +1,22 @@
 var assert = require("assert");
 var seedrandom = require("../seedrandom");
 var requirejs = require("requirejs");
-requirejs.config({
-  baseUrl: __dirname
-});
+
+// Stub out requirejs if in the browser via browserify.
+if (process.browser) {
+  requirejs = function() { return seedrandom; }
+} else {
+  requirejs.config({
+    baseUrl: __dirname
+  });
+}
 
 describe("Nodejs API Test", function() {
 
 it('should pass basic tests.', function() {
   var original = Math.random,
       result, r, xprng, obj, as2, as3, autoseed1, myrng,
-      firstprng, secondprng, thirdprng;
+      firstprng, secondprng, thirdprng, rng;
 
   result = Math.seedrandom('hello.');
   firstprng = Math.random;

@@ -53,9 +53,24 @@ module.exports = function(grunt) {
         }
       }
     },
+    browserify: {
+      test: {
+        files: {
+          'test/browserified.js': ['test/nodetest.js'],
+        },
+        options: {
+          ignore: ['requirejs'],
+        }
+      }
+    },
     mochacov: {
       options: {
-        files: ['test/cryptotest.js', 'test/nodetest.js', 'test/prngtest.js']
+        files: [
+          'test/cryptotest.js',
+          'test/nodetest.js',
+          'test/prngtest.js',
+          'test/browserified.js'
+       ]
       },
       coverage: {
         options: {
@@ -81,8 +96,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-mocha-cov');
   grunt.loadNpmTasks('grunt-release');
+  grunt.loadNpmTasks('grunt-browserify');
 
-  grunt.registerTask("test", ["connect", "qunit", "mochacov:test"]);
+  grunt.registerTask("test",
+      ["browserify", "connect", "qunit", "mochacov:test"]);
   grunt.registerTask("default", ["uglify", "test"]);
   grunt.registerTask("travis", ["default", "mochacov:coverage"]);
 };

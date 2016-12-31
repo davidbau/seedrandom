@@ -38,6 +38,7 @@
     "blanket": "latest",
     "grunt": "latest",
     "grunt-bowercopy": "latest",
+    "grunt-browserify": "latest",
     "grunt-cli": "latest",
     "grunt-contrib-connect": "latest",
     "grunt-contrib-qunit": "latest",
