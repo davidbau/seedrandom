@@ -38,18 +38,20 @@ module.exports = function(grunt) {
         }
       }
     },
-    sed: {
-      nullchar: {
-        path: "<%= pkg.name %>.min.js",
-        pattern: '\\\\x00',
-        replacement: '\\0'
-      },
-    },
     qunit: {
       options: {
-        noGlobals: true
+        noGlobals: true,
+        httpBase: 'http://localhost:8192'
       },
       all: ["test/*.html"]
+    },
+    connect: {
+      server: {
+        options: {
+          port: 8192,
+          base: '.'
+        }
+      }
     },
     mochacov: {
       options: {
@@ -74,13 +76,14 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks('grunt-bowercopy');
+  grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-mocha-cov');
   grunt.loadNpmTasks('grunt-release');
-  grunt.loadNpmTasks('grunt-sed');
 
-  grunt.registerTask("default", ["uglify", "sed", "qunit", "mochacov:test"]);
+  grunt.registerTask("test", ["connect", "qunit", "mochacov:test"]);
+  grunt.registerTask("default", ["uglify", "test"]);
   grunt.registerTask("travis", ["default", "mochacov:coverage"]);
 };
 

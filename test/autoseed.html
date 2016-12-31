@@ -8,9 +8,9 @@
 <script src="lib/qunit.js"></script>
 <script src="../seedrandom.js"></script>
 <script>
-module("Simple Test");
+QUnit.module("Simple Test");
 
-test("Check that we can reproduce a seed", function() {
+QUnit.test("Check that we can reproduce a seed", function(assert) {
   var seed;
   var time = new Date().getTime();
   var seediter = 50;
@@ -33,10 +33,10 @@ test("Check that we can reproduce a seed", function() {
   for (j = 0; j < vals.length; ++j) {
     var saw = vals[j];
     var got = Math.random();
-    equal(saw, got, saw + " vs " + got);
+    assert.equal(saw, got, saw + " vs " + got);
   }
 
-  ok(true, '' +
+  assert.ok(true, '' +
      'Seeding took ' + seedtime + ' ms per seedrandom' +
      ' in ' + time + ' ms for ' + iters +
      ' calls, ' + (time / iters) + ' ms per random()' + '');

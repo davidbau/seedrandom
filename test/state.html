@@ -8,9 +8,10 @@
 <script src="../seedrandom.min.js"></script>
 <script src="lib/qunit.js"></script>
 <script>
-module("Options API Test");
+QUnit.module("Options API Test");
 
-test("Verify that state method is not normally present", function() {
+QUnit.test("Verify that state method is not normally present",
+function(assert) {
 
 var seedrandom = Math.seedrandom;
 var dummy = seedrandom('hello');
@@ -21,32 +22,32 @@ try {
 } catch(e) {
   expected = 1;
 }
-equal(unexpected, -1);
-equal(expected, 1);
+assert.equal(unexpected, -1);
+assert.equal(expected, 1);
 var count = 0;
 for (var x in dummy) {
   if (x == 'state') count += 1;
 }
-equal(count, 0);
+assert.equal(count, 0);
 
 });
 
-test("Verify that state option works as advertised", function() {
+QUnit.test("Verify that state option works as advertised", function(assert) {
 
 var seedrandom = Math.seedrandom;
 var saveable = seedrandom("secret-seed", {state: true});
 var ordinary = seedrandom("secret-seed");
 for (var j = 0; j < 1e3; ++j) {
-  equal(ordinary(), saveable());
+  assert.equal(ordinary(), saveable());
 }
 var virgin = seedrandom("secret-seed");
 var saved = saveable.state();
 var replica = seedrandom("", {state: saved});
 for (var j = 0; j < 1e2; ++j) {
   var r = replica();
-  equal(r, saveable());
-  equal(r, ordinary());
-  ok(r != virgin());
+  assert.equal(r, saveable());
+  assert.equal(r, ordinary());
+  assert.ok(r != virgin());
 }
 
 });

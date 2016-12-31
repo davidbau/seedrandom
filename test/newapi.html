@@ -8,34 +8,34 @@
 <script src="lib/qunit.js"></script>
 <script src="../seedrandom.min.js"></script>
 <script>
-module("New API Test");
+QUnit.module("New API Test");
 
-test("Check that we can use new", function() {
+QUnit.test("Check that we can use new", function(assert) {
 
-ok(true, "Seeded random created with new:");
+assert.ok(true, "Seeded random created with new:");
 var check = [];
 var prng = new Math.seedrandom(1);
 var r;
 for (var j = 0; j < 5; ++j) {
   r = prng();
-  ok(true, r);
+  assert.ok(true, r);
   check.push(r);
 }
-ok(true, "Native random:");
+assert.ok(true, "Native random:");
 for (var j = 0; j < 5; ++j) {
   r = Math.random();
-  ok(true, r);
+  assert.ok(true, r);
   check.push(r);
 }
 var seed = Math.seedrandom(1);
-ok(true, "Overridden random without new " +
+assert.ok(true, "Overridden random without new " +
   "(return value " + seed + "):");
 for (var j = 0; j < 10; ++j) {
   r = Math.random();
   if (j < 5) {
-    equal(check[j], r, r + " vs " + check[j]);
+    assert.equal(check[j], r, r + " vs " + check[j]);
   } else {
-    ok(check[j] != r, "unequal: " + r + " vs " + check[j]);
+    assert.ok(check[j] != r, "unequal: " + r + " vs " + check[j]);
   }
 }
 });
