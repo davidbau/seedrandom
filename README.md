@@ -273,7 +273,7 @@ numbers on Opera at about 0.0005 ms per seeded Math.random().
 Alternatives
 ------------
 
-https://npmcompare.com/compare/random-bytes-seed,random-seed,seed-random,seedrandom
+https://npmcompare.com/compare/random-bytes-seed,random-seed,seed-random,seeded-random,seedrandom
 
 
 LICENSE (MIT)
