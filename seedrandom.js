@@ -35,7 +35,7 @@ var global = this,
     significance = math.pow(2, digits),
     overflow = significance * 2,
     mask = width - 1,
-    crypto = require('crypto');
+    nodecrypto;         // node.js crypto module, initialized at the bottom.
 
 //
 // seedrandom()
@@ -193,7 +193,10 @@ function mixkey(seed, key) {
 //
 function autoseed() {
   try {
-    return tostring(crypto.randomBytes(width));
+    if (nodecrypto) { return tostring(nodecrypto.randomBytes(width)); }
+    var out = new Uint8Array(width);
+    (global.crypto || global.msCrypto).getRandomValues(out);
+    return tostring(out);
   } catch (e) {
     var browser = global.navigator,
         plugins = browser && browser.plugins;
@@ -224,6 +227,10 @@ mixkey(math.random(), pool);
 //
 if ((typeof module) == 'object' && module.exports) {
   module.exports = seedrandom;
+  // When in node.js, try using crypto package for autoseeding.
+  try {
+    nodecrypto = require('crypto');
+  } catch (ex) {}
 } else if ((typeof define) == 'function' && define.amd) {
   define(function() { return seedrandom; });
 }
