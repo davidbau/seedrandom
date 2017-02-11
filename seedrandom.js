@@ -196,6 +196,7 @@ function autoseed() {
     if (nodecrypto) { return tostring(nodecrypto.randomBytes(width)); }
     var out = new Uint8Array(width);
     (global.crypto || global.msCrypto).getRandomValues(out);
+
     return tostring(out);
   } catch (e) {
     var browser = global.navigator,
