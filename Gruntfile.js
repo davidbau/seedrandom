@@ -59,7 +59,10 @@ module.exports = function(grunt) {
           'test/browserified.js': ['test/nodetest.js'],
         },
         options: {
-          ignore: ['requirejs'],
+          ignore: ['requirejs', 'process'],
+          alias: {
+            'assert': './test/qunitassert.js'
+          }
         }
       }
     },
@@ -68,8 +71,7 @@ module.exports = function(grunt) {
         files: [
           'test/cryptotest.js',
           'test/nodetest.js',
-          'test/prngtest.js',
-          'test/browserified.js'
+          'test/prngtest.js'
        ]
       },
       coverage: {
