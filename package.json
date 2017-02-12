@@ -35,7 +35,7 @@
     }
   },
   "browser": {
-    "crypto": "./lib/crypto.js"
+    "crypto": false
   },
   "devDependencies": {
     "blanket": "latest",
