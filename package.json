@@ -4,8 +4,8 @@
   "description": "Seeded random number generator for Javascript.",
   "main": "index.js",
   "keywords": [
-    "random",
     "seed",
+    "random",
     "crypto"
   ],
   "scripts": {
