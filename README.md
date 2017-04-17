@@ -6,7 +6,7 @@ seedrandom.js
 
 Seeded random number generator for JavaScript.
 
-Version 2.4.2
+Version 2.4.3
 
 Author: David Bau
 
@@ -19,7 +19,7 @@ Script tag usage
 ----------------
 
 ```html
-<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.0/seedrandom.min.js">
+<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.3/seedrandom.min.js">
 </script>
 ```
 
@@ -54,12 +54,12 @@ console.log(myrng.int32());          // Always 986220731
 Other Fast PRNG Algorithms
 --------------------------
 
-The package includes some other fast PRNGs.  To use Richard Brent's
-xorgens-4096 PRNG:
+The package includes some other fast PRNGs.  To use Johannes Baagøe's
+extremely fast Alea PRNG:
 
 
 ```html
-<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.0/lib/xor4096.min.js">
+<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.3/lib/alea.min.js">
 </script>
 ```
 
@@ -81,7 +81,7 @@ Besides xor4096, there are several other faster PRNGs available.
 
 |PRNG name  | Time vs native | Period      | Author               |
 |-----------|----------------|-------------|----------------------|
-|`alea`     |  1.95 ns, 0.9x | ~2^116      | Baagoe               |
+|`alea`     |  1.95 ns, 0.9x | ~2^116      | Baagøe               |
 |`xor128`   |  2.04 ns, 0.9x | 2^128-1     | Marsaglia            |
 |`tychei`   |  2.32 ns, 1.1x | ~2^127      | Neves/Araujo (ChaCha)|
 |`xorwow`   |  2.40 ns, 1.1x | 2^192-2^32  | Marsaglia            |
@@ -146,7 +146,7 @@ Network seeding
 ---------------
 
 ```html
-<script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.0/seedrandom.min.js>
+<script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.3/seedrandom.min.js>
 </script>
 <!-- Seeds using urandom bits from a server. -->
 <script src=//jsonlib.appspot.com/urandom?callback=Math.seedrandom>
@@ -237,6 +237,7 @@ The random number sequence is the same as version 1.0 for string seeds.
 * Version 2.3.11 adds an option to load and save internal state.
 * Version 2.4.0 adds implementations of several other fast PRNGs.
 * Version 2.4.2 adds an implementation of Baagoe's very fast Alea PRNG.
+* Version 2.4.3 ignores nodejs crypto when under browserify.
 
 The standard ARC4 key scheduler cycles short keys, which means that
 seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.
