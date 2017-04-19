@@ -10,7 +10,7 @@ Version 2.4.3
 
 Author: David Bau
 
-Date: 2015-07-04
+Date: 2017-04-17
 
 Can be used as a plain script, a Node.js module or an AMD module.
 
@@ -64,20 +64,20 @@ extremely fast Alea PRNG:
 ```
 
 ```js
-// Use xor4096 for Richard Brent's xorgens-4096 algorithm.
-var xorgen = new xor4096('hello.');
+// Use alea for Johannes Baagøe's clever and fast floating-point RNG.
+var arng = new alea('hello.');
 
 // By default provides 32 bits of randomness in a float.
-console.log(xorgen());               // Always 0.9798525865189731
+console.log(arng());               // Always 0.4783254903741181
 
 // Use "double" to get 56 bits of randomness.
-console.log(xorgen.double());        // Always 0.03583478477375346
+console.log(arng.double());        // Always 0.8297006866124559
 
 // Use "int32" to get a 32 bit (signed) integer.
-console.log(xorgen.int32());         // Always 1341429986
-````
+console.log(arng.int32());         // Always 1076136327
+```
 
-Besides xor4096, there are several other faster PRNGs available.
+Besides alea, there are several other faster PRNGs available.
 
 |PRNG name  | Time vs native | Period      | Author               |
 |-----------|----------------|-------------|----------------------|
