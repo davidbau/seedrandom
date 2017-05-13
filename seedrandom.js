@@ -166,7 +166,9 @@ function flatten(obj, depth) {
   var result = [], typ = (typeof obj), prop;
   if (depth && typ == 'object') {
     for (prop in obj) {
-      try { result.push(flatten(obj[prop], depth - 1)); } catch (e) {}
+      if (obj.hasOwnProperty(prop)) {
+        try { result.push(flatten(obj[prop], depth - 1)); } catch (e) {}
+      }
     }
   }
   return (result.length ? result : typ == 'string' ? obj : obj + '\0');
