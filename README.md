@@ -271,6 +271,11 @@ a 2012 windows 7 1.5ghz i5 laptop, as seen on Firefox 19, IE 10, and Opera.
 Seeded rng calls themselves are fast across these browsers, with slowest
 numbers on Opera at about 0.0005 ms per seeded Math.random().
 
+Alternatives
+------------
+
+https://npmcompare.com/compare/random-bytes-seed,random-seed,seed-random,seeded-random,seedrandom
+
 
 LICENSE (MIT)
 -------------
