@@ -32,7 +32,7 @@ module.exports = function(grunt) {
         options: {
           preserveComments: false,
           report: "min",
-          beautify: {
+          output: {
             ascii_only: true
           }
         }
