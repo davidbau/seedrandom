@@ -78,6 +78,9 @@ console.log(arng.int32());         // Always 1076136327
 ```
 
 Besides alea, there are several other faster PRNGs available.
+Note that none of these fast PRNGs provide autoseeding: you
+need to provide your own seed (or use the default autoseeded
+seedrandom to make a seed).
 
 |PRNG name  | Time vs native | Period      | Author               |
 |-----------|----------------|-------------|----------------------|
