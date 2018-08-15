@@ -51,6 +51,18 @@ console.log(myrng.int32());          // Always 986220731
 
 ```
 
+**Note**: calling `Math.seedrandom('constant')` will make `Math.random()`
+predictable globally, which is intended to be useful for derandomizing
+code for testing, and should not be done in a production library. If you
+need a local seeded PRNG, use `myrng = new Math.seedrandom('seed')`
+instead.  For example, [cryptico](https://www.npmjs.com/package/cryptico),
+an RSA encryption package, [uses the wrong form](
+https://github.com/wwwtyro/cryptico/blob/9291ece6/api.js#L264),
+and thus secretly makes `Math.random()` perfectly predictable.
+The cryptico library (and any other library that does this)
+should not be trusted in a security-sensitive application.
+
+
 Other Fast PRNG Algorithms
 --------------------------
 
