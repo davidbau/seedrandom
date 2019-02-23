@@ -19,7 +19,7 @@ Script tag usage
 ----------------
 
 ```html
-<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.4/seedrandom.min.js">
+<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.0/seedrandom.min.js">
 </script>
 ```
 
@@ -71,7 +71,7 @@ extremely fast Alea PRNG:
 
 
 ```html
-<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.4/lib/alea.min.js">
+<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.0/lib/alea.min.js">
 </script>
 ```
 
@@ -164,7 +164,7 @@ Network seeding
 ---------------
 
 ```html
-<script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.4/seedrandom.min.js>
+<script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.0/seedrandom.min.js>
 </script>
 <!-- Seeds using urandom bits from a server. -->
 <script src=//jsonlib.appspot.com/urandom?callback=Math.seedrandom>
