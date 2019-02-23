@@ -20,7 +20,7 @@ require.config({
 require(['qunit', 'seedrandom'], function(QUnit, seedrandom) {
   QUnit.start();
   QUnit.module('require.js test');
-  QUnit.test('some normal test', function(assert) {
+  QUnit.test('some normal tests', function(assert) {
     assert.ok(true, "Seeded random created using module:");
     var check = [];
     var prng = seedrandom('predictable.');
@@ -36,12 +36,12 @@ require(['qunit', 'seedrandom'], function(QUnit, seedrandom) {
       assert.ok(true, r + "");
       check.push(r);
     }
-    // Verify against Math.seedrandom.
-    var seed = Math.seedrandom('predictable.');
-    assert.equal(seed, 'predictable.',
-        "Seed should be returned from Math.seedrandom.");
+    // Verify that Math.seedrandom does not exist
+    assert.ok(typeof Math.seedrandom == 'undefined');
+    // Using seedrandom a second time should result in the same sequence.
+    var prng2 = seedrandom('predictable.');
     for (var j = 0; j < 10; ++j) {
-      r = Math.random();
+      r = prng2();
       if (j < 5) {
         assert.equal(check[j], r, "Equal: " + r + " vs " + check[j]);
       } else {

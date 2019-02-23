@@ -105,7 +105,6 @@ function seedrandom(seed, options, callback) {
   'global' in options ? options.global : (this == math),
   options.state);
 }
-math['seed' + rngname] = seedrandom;
 
 //
 // ARC4
@@ -241,7 +240,11 @@ if ((typeof module) == 'object' && module.exports) {
   } catch (ex) {}
 } else if ((typeof define) == 'function' && define.amd) {
   define(function() { return seedrandom; });
+} else {
+  // When included as a plain script, set up Math.seedrandom global.
+  math['seed' + rngname] = seedrandom;
 }
+
 
 // End anonymous scope, and pass initial values.
 })(

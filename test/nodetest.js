@@ -18,45 +18,9 @@ it('should pass basic tests.', function() {
       result, r, xprng, obj, as2, as3, autoseed1, myrng,
       firstprng, secondprng, thirdprng, rng;
 
-  result = Math.seedrandom('hello.');
-  firstprng = Math.random;
-  assert.ok(original !== firstprng, "Should change Math.random.");
-  assert.equal(result, "hello.", "Should return short seed.");
-  r = Math.random();
-  assert.equal(r, 0.9282578795792454, "Should be 'hello.'#1");
-  r = Math.random();
-  assert.equal(r, 0.3752569768646784, "Should be 'hello.'#2");
-
-  // should be able to autoseed
-  result = Math.seedrandom();
-  secondprng = Math.random;
-  assert.ok(original !== secondprng, "Should change Math.random.");
-  assert.ok(firstprng !== secondprng, "Should change Math.random.");
-  assert.equal(result.length, 256, "Should return short seed.");
-  r = Math.random();
-  assert.ok(r > 0, "Should be posititive.");
-  assert.ok(r < 1, "Should be less than 1.");
-  assert.ok(r != 0.9282578795792454, "Should not be 'hello.'#1");
-  assert.ok(r != 0.3752569768646784, "Should not be 'hello.'#2");
-  assert.ok(r != 0.7316977468919549, "Should not be 'hello.'#3");
-  autoseed1 = r;
-
-  // should be able to add entropy.
-  result = Math.seedrandom('added entropy.', { entropy:true });
-  assert.equal(result.length, 256, "Should return short seed.");
-  thirdprng = Math.random;
-  assert.ok(thirdprng !== secondprng, "Should change Math.random.");
-  r = Math.random();
-  assert.ok(r != 0.597067214994467, "Should not be 'added entropy.'#1");
-
-  // Reset to original Math.random.
-  Math.random = original;
-  // should be able to use new Math.seedrandom('hello.')
-  myrng = new Math.seedrandom('hello.');
-  assert.ok(original === Math.random, "Should not change Math.random.");
-  assert.ok(original !== myrng, "PRNG should not be Math.random.");
-  r = myrng();
-  assert.equal(r, 0.9282578795792454, "Should be 'hello.'#1");
+  // Global API should no longer be available.
+  assert.ok(typeof Math.seedrandom == 'undefined',
+      "Math.seedrandom shouldn't be defined");
 
   // should be able to use seedrandom('hello.')"
   rng = seedrandom('hello.');
@@ -104,12 +68,13 @@ it('should pass basic tests.', function() {
 
   // The pass option
   // should be able to use Math.seedrandom(null, { pass: ...
-  obj = Math.seedrandom(null, { pass: function(prng, seed) {
+  obj = seedrandom(null, { pass: function(prng, seed) {
     return { random: prng, seed: seed };
   }});
   assert.ok(original === Math.random, "Should not change Math.random.");
   assert.ok(original !== obj.random, "Should be different from Math.random.");
-  assert.equal(typeof(obj.random), 'function', "Should return a PRNG function.");
+  assert.equal(typeof(obj.random), 'function',
+               "Should return a PRNG function.");
   assert.equal(typeof(obj.seed), 'string', "Should return a seed.");
   as2 = obj.random();
   assert.ok(as2 != 0.9282578795792454, "Should not be 'hello.'#1");
@@ -119,7 +84,7 @@ it('should pass basic tests.', function() {
 
   // Exercise pass again, with explicit seed and global
   // should be able to use Math.seedrandom('hello.', { pass: ...
-  result = Math.seedrandom('hello.', {
+  result = seedrandom('hello.', {
     global: 'abc',
     pass: function(prng, seed, global) {
       assert.equal(typeof(prng), 'function', "Callback arg #1 assert");
@@ -133,7 +98,7 @@ it('should pass basic tests.', function() {
 
   // Legacy third argument callback argument:
   // should be able to use Math.seedrandom('hello.', { global: 50 }, callback)
-  result = Math.seedrandom('hello.', { global: 50 },
+  result = seedrandom('hello.', { global: 50 },
     function(prng, seed, global) {
       assert.equal(typeof(prng), 'function', "Callback arg #1 assert");
       assert.equal(seed, 'hello.', "Callback arg #2 assert");
@@ -146,24 +111,12 @@ it('should pass basic tests.', function() {
 
   // Global: false.
   // should be able to use new Math.seedrandom('hello.', {global: false})
-  myrng = new Math.seedrandom('hello.', {global:false});
+  myrng = seedrandom('hello.', {global:false});
   assert.equal(typeof(myrng), 'function', "Should return a PRNG funciton.");
   assert.ok(original === Math.random, "Should not change Math.random.");
   assert.ok(original !== myrng, "PRNG should not be Math.random.");
   r = myrng();
   assert.equal(r, 0.9282578795792454, "Should be 'hello.'#1");
-
-  // options = {} when a method of Math.
-  // should be able to use Math.seedrandom('hello.', {})
-  result = Math.seedrandom('hello.');
-  xprng = Math.random;
-  assert.ok(original !== xprng, "Should change Math.random.");
-  assert.equal(result, "hello.", "Should return short seed.");
-  r = Math.random();
-  assert.equal(r, 0.9282578795792454, "Should be 'hello.'#1");
-  r = Math.random();
-  assert.equal(r, 0.3752569768646784, "Should be 'hello.'#2");
-  Math.random = original;
 
   // options = {} when not a method of Math
   // should be able to use seedrandom('hello.', {})
