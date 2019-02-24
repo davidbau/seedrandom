@@ -24,37 +24,39 @@ Script tag usage
 ```
 
 ```js
-// Sets Math.random to a PRNG initialized using the given explicit seed.
+// Make a predictable pseudorandom number generator.
+var myrng = new Math.seedrandom('hello.');
+console.log(myrng());                // Always 0.9282578795792454
+console.log(myrng());                // Always 0.3752569768646784
+
+// Use "quick" to get only 32 bits of randomness in a float.
+console.log(myrng.quick());          // Always 0.7316977467853576
+
+// Use "int32" to get a 32 bit (signed) integer
+console.log(myrng.int32());          // Always 1966374204
+
+// Calling seedrandom with no arguments creates an ARC4-based PRNG
+// that is autoseeded using the current time, dom state, and other
+// accumulated local entropy.
+var prng = new Math.seedrandom();
+console.log(prng());                // Reasonably unpredictable.
+
+// Seeds using the given explicit seed mixed with accumulated entropy.
+prng = new Math.seedrandom('added entropy.', { entropy: true });
+console.log(prng());                // As unpredictable as added entropy.
+
+// Warning: if you call Math.seedrandom without `new`, it replaces
+// Math.random with the predictable new Math.seedrandom(...), as follows:
 Math.seedrandom('hello.');
 console.log(Math.random());          // Always 0.9282578795792454
 console.log(Math.random());          // Always 0.3752569768646784
 
-// Sets Math.random to an ARC4-based PRNG that is autoseeded using the
-// current time, dom state, and other accumulated local entropy.
-// The generated seed string is returned.
-Math.seedrandom();
-console.log(Math.random());          // Reasonably unpredictable.
-
-// Seeds using the given explicit seed mixed with accumulated entropy.
-Math.seedrandom('added entropy.', { entropy: true });
-console.log(Math.random());          // As unpredictable as added entropy.
-
-// Use "new" to create a local prng without altering Math.random.
-var myrng = new Math.seedrandom('hello.');
-console.log(myrng());                // Always 0.9282578795792454
-
-// Use "quick" to get only 32 bits of randomness in a float.
-console.log(myrng.quick());          // Always 0.3752569768112153
-
-// Use "int32" to get a 32 bit (signed) integer
-console.log(myrng.int32());          // Always 986220731
-
 ```
 
-**Note**: calling `Math.seedrandom('constant')` will make `Math.random()`
-predictable globally, which is intended to be useful for derandomizing
-code for testing, and should not be done in a production library. If you
-need a local seeded PRNG, use `myrng = new Math.seedrandom('seed')`
+**Note**: calling `Math.seedrandom('constant')` without `new` will make
+`Math.random()` predictable globally, which is intended to be useful for
+derandomizing code for testing, but should not be done in a production library.
+If you need a local seeded PRNG, use `myrng = new Math.seedrandom('seed')`
 instead.  For example, [cryptico](https://www.npmjs.com/package/cryptico),
 an RSA encryption package, [uses the wrong form](
 https://github.com/wwwtyro/cryptico/blob/9291ece6/api.js#L264),
@@ -109,8 +111,8 @@ instance.  `quick` is just the 32-bit version of the RC4-based PRNG
 originally packaged with seedrandom.)
 
 
-Node.js usage
--------------
+CJS / Node.js usage
+-------------------
 
 ```
 npm install seedrandom
@@ -139,7 +141,7 @@ var rng2 = seedrandom.xor4096('hello.')
 console.log(rng2());
 ```
 
-Starting in version 3.0.0, when using from node.js, the global
+Starting in version 3.0.0, when using via require('seedrandom'), the global
 `Math.seedrandom` is no longer available.
 
 
@@ -257,7 +259,7 @@ The random number sequence is the same as version 1.0 for string seeds.
 * Version 2.4.2 adds an implementation of Baagoe's very fast Alea PRNG.
 * Version 2.4.3 ignores nodejs crypto when under browserify.
 * Version 2.4.4 avoids strict mode problem with global this reference.
-* Version 3.0.0 removes Math.seedrandom global for nodejs users.
+* Version 3.0.0 removes Math.seedrandom for require('seedrandom') users.
 
 The standard ARC4 key scheduler cycles short keys, which means that
 seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.
