@@ -6,11 +6,11 @@ seedrandom.js
 
 Seeded random number generator for JavaScript.
 
-Version 3.0.0
+Version 3.0.1
 
 Author: David Bau
 
-Date: 2019-03-02
+Date: 2019-03-04
 
 Can be used as a plain script, a Node.js module or an AMD module.
 
@@ -19,7 +19,7 @@ Script tag usage
 ----------------
 
 ```html
-<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.0/seedrandom.min.js">
+<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.1/seedrandom.min.js">
 </script>
 ```
 
@@ -73,7 +73,7 @@ extremely fast Alea PRNG:
 
 
 ```html
-<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.0/lib/alea.min.js">
+<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.1/lib/alea.min.js">
 </script>
 ```
 
@@ -141,7 +141,7 @@ var rng2 = seedrandom.xor4096('hello.')
 console.log(rng2());
 ```
 
-Starting in version 3.0.0, when using via require('seedrandom'), the global
+Starting in version 3, when using via require('seedrandom'), the global
 `Math.seedrandom` is no longer available.
 
 
@@ -166,7 +166,7 @@ Network seeding
 ---------------
 
 ```html
-<script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.0/seedrandom.min.js>
+<script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.1/seedrandom.min.js>
 </script>
 <!-- Seeds using urandom bits from a server. -->
 <script src=//jsonlib.appspot.com/urandom?callback=Math.seedrandom>
@@ -259,7 +259,7 @@ The random number sequence is the same as version 1.0 for string seeds.
 * Version 2.4.2 adds an implementation of Baagoe's very fast Alea PRNG.
 * Version 2.4.3 ignores nodejs crypto when under browserify.
 * Version 2.4.4 avoids strict mode problem with global this reference.
-* Version 3.0.0 removes Math.seedrandom for require('seedrandom') users.
+* Version 3.0.1 removes Math.seedrandom for require('seedrandom') users.
 
 The standard ARC4 key scheduler cycles short keys, which means that
 seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.
