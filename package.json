@@ -51,7 +51,6 @@
     "grunt-mocha-nyc": "latest",
     "mocha": "latest",
     "nyc": "latest",
-    "phantomjs-prebuilt": "latest",
     "proxyquire": "latest",
     "qunit": "latest",
     "requirejs": "latest"
