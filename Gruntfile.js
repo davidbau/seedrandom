@@ -3,19 +3,14 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON("package.json"),
-    bowercopy: {
-      options: {
-        clean: true
-      },
-      test: {
-        options: {
-          destPrefix: "test/lib"
-        },
-        files: {
-          "qunit.js" : "qunit/qunit/qunit.js",
-          "qunit.css" : "qunit/qunit/qunit.css",
-          "require.js" : "requirejs/require.js"
-        }
+    copy: {
+      browsertest: {
+        files: [
+          { expand: true, cwd: 'node_modules/qunit/qunit', src: 'qunit.*' ,
+            dest: 'test/lib'},
+          { expand: true, cwd: 'node_modules/requirejs', src: 'require.js',
+            dest: 'test/lib'}
+        ],
       }
     },
     uglify: {
@@ -86,7 +81,7 @@ module.exports = function(grunt) {
 
   grunt.event.on('coverage', require('coveralls').handleInput);
 
-  grunt.loadNpmTasks('grunt-bowercopy');
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -94,8 +89,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-release');
   grunt.loadNpmTasks('grunt-browserify');
 
-  grunt.registerTask("test",
-      ["browserify", "connect", "qunit", "mocha_istanbul:coverage"]);
+  grunt.registerTask("test", ["copy:browsertest", "browserify",
+                     "connect", "qunit", "mocha_istanbul:coverage"]);
   grunt.registerTask("default", ["uglify", "test"]);
   grunt.registerTask("travis", ["default", "mocha_istanbul:coveralls"]);
 };
