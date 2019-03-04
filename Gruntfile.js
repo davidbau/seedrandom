@@ -61,7 +61,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    mocha_istanbul: {
+    mocha_nyc: {
       coverage: {
         src: 'test/*test.js'
       },
@@ -85,13 +85,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-mocha-istanbul');
+  grunt.loadNpmTasks('grunt-mocha-nyc');
   grunt.loadNpmTasks('grunt-release-github');
   grunt.loadNpmTasks('grunt-browserify');
 
   grunt.registerTask("test", ["copy:browsertest", "browserify",
-                     "connect", "qunit", "mocha_istanbul:coverage"]);
+                     "connect", "qunit", "mocha_nyc:coverage"]);
   grunt.registerTask("default", ["uglify", "test"]);
-  grunt.registerTask("travis", ["default", "mocha_istanbul:coveralls"]);
+  grunt.registerTask("travis", ["default", "mocha_nyc:coveralls"]);
 };
 
