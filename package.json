@@ -41,21 +41,19 @@
     "blanket": "latest",
     "coveralls": "^3.0.3",
     "grunt": "^1.0.3",
+    "grunt-browserify": "^5.3.0",
+    "grunt-release-github": "davidbau/grunt-release-github",
     "grunt-cli": "latest",
     "grunt-contrib-connect": "latest",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-qunit": "latest",
     "grunt-contrib-uglify": "latest",
     "grunt-mocha-istanbul": "^5.0.2",
-    "grunt-release": "latest",
     "istanbul": "^0.4.5",
     "mocha": "^6.0.2",
     "phantomjs-prebuilt": "latest",
     "proxyquire": "latest",
     "qunit": "latest",
     "requirejs": "latest"
-  },
-  "dependencies": {
-    "grunt-browserify": "^5.3.0"
   }
 }

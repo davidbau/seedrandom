@@ -86,7 +86,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-mocha-istanbul');
-  grunt.loadNpmTasks('grunt-release');
+  grunt.loadNpmTasks('grunt-release-github');
   grunt.loadNpmTasks('grunt-browserify');
 
   grunt.registerTask("test", ["copy:browsertest", "browserify",
