@@ -42,7 +42,7 @@
     "coveralls": "latest",
     "grunt": "latest",
     "grunt-browserify": "latest",
-    "grunt-release-github": "davidbau/grunt-release-github",
+    "grunt-release": "davidbau/grunt-release",
     "grunt-cli": "latest",
     "grunt-contrib-connect": "latest",
     "grunt-contrib-copy": "latest",
