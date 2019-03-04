@@ -66,22 +66,14 @@ module.exports = function(grunt) {
         }
       }
     },
-    mochacov: {
-      options: {
-        files: [
-          'test/cryptotest.js',
-          'test/nodetest.js',
-          'test/prngtest.js'
-       ]
-      },
+    mocha_istanbul: {
       coverage: {
-        options: {
-          coveralls: true
-        }
+        src: 'test/*test.js'
       },
-      test: {
+      coveralls: {
+        src: 'test/*test.js',
         options: {
-          reporter: 'dot'
+          coverage: true
         }
       }
     },
@@ -92,17 +84,19 @@ module.exports = function(grunt) {
     }
   });
 
+  grunt.event.on('coverage', require('coveralls').handleInput);
+
   grunt.loadNpmTasks('grunt-bowercopy');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-mocha-cov');
+  grunt.loadNpmTasks('grunt-mocha-istanbul');
   grunt.loadNpmTasks('grunt-release');
   grunt.loadNpmTasks('grunt-browserify');
 
   grunt.registerTask("test",
-      ["browserify", "connect", "qunit", "mochacov:test"]);
+      ["browserify", "connect", "qunit", "mocha_istanbul:coverage"]);
   grunt.registerTask("default", ["uglify", "test"]);
-  grunt.registerTask("travis", ["default", "mochacov:coverage"]);
+  grunt.registerTask("travis", ["default", "mocha_istanbul:coveralls"]);
 };
 
