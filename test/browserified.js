@@ -4,7 +4,7 @@ require=(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c=
 arguments[4][1][0].apply(exports,arguments)
 },{"dup":1}],3:[function(require,module,exports){
 /*
-Copyright 2014 David Bau.
+Copyright 2019 David Bau.
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
