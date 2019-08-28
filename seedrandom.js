@@ -22,15 +22,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
 
-(function (pool, math) {
+(function (global, pool, math) {
 //
 // The following constants are related to IEEE 754 limits.
 //
 
-// Detect the global object, even if operating in strict mode.
-// http://stackoverflow.com/a/14387057/265298
-var global = (0, eval)('this'),
-    width = 256,        // each RC4 output is 0 <= x < 256
+var width = 256,        // each RC4 output is 0 <= x < 256
     chunks = 6,         // at least six RC4 outputs for each double
     digits = 52,        // there are 52 significant digits in a double
     rngname = 'random', // rngname: name for Math.random and Math.seedrandom
@@ -248,6 +245,9 @@ if ((typeof module) == 'object' && module.exports) {
 
 // End anonymous scope, and pass initial values.
 })(
+  // global: `self` in browsers (including strict mode and web workers),
+  // otherwise `this` in Node and other environments
+  (typeof self !== 'undefined') ? self : this,
   [],     // pool: entropy pool starts empty
   Math    // math: package containing random, pow, and seedrandom
 );
