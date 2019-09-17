@@ -6,11 +6,11 @@ seedrandom.js
 
 Seeded random number generator for JavaScript.
 
-Version 3.0.3
+Version 3.0.5
 
 Author: David Bau
 
-Date: 2019-08-09
+Date: 2019-09-14
 
 Can be used as a plain script, a Node.js module or an AMD module.
 
@@ -19,7 +19,7 @@ Script tag usage
 ----------------
 
 ```html
-<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.3/seedrandom.min.js">
+<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js">
 </script>
 ```
 
@@ -73,7 +73,7 @@ extremely fast Alea PRNG:
 
 
 ```html
-<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.3/lib/alea.min.js">
+<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/lib/alea.min.js">
 </script>
 ```
 
@@ -166,7 +166,7 @@ Network seeding
 ---------------
 
 ```html
-<script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.3/seedrandom.min.js>
+<script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js>
 </script>
 <!-- Seeds using urandom bits from a server. -->
 <script src=//jsonlib.appspot.com/urandom?callback=Math.seedrandom>
@@ -261,6 +261,7 @@ The random number sequence is the same as version 1.0 for string seeds.
 * Version 2.4.4 avoids strict mode problem with global this reference.
 * Version 3.0.1 removes Math.seedrandom for require('seedrandom') users.
 * Version 3.0.3 updates package.json for CDN entrypoints.
+* Version 3.0.5 removes eval to avoid triggering content-security policy.
 
 The standard ARC4 key scheduler cycles short keys, which means that
 seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.
