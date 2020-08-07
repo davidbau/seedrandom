@@ -1,137 +1,75 @@
 // Minimum TypeScript Version: 3.5
 
-export type PropType<TObj, TProp extends keyof TObj> = TObj[TProp];
-
-export interface Prng {
-  int32(): number;
-  quick(): number;
-  double(): number;
-}
-export interface PrngWithState<TState> extends Prng {
-  state(): TState;
-}
-
-export interface Arc4 {
-  i: number;
-  j: number;
-  S: number[];
-}
-export interface AleaXg {
-  c: number;
-  s0: number;
-  s1: number;
-  s2: number;
-}
-export interface Xor128Xg {
-  x: number;
-  y: number;
-  z: number;
-  w: number;
-}
-export interface XorwowXg {
-  x: number;
-  y: number;
-  z: number;
-  w: number;
-  v: number;
-  d: number;
-}
-export interface Xorshift7Xg {
-  x: number[];
-  i: number;
-}
-export interface Xor4096Xg {
-  i: number;
-  w: number;
-  X: number[];
-}
-export interface TycheiXg {
-  a: number;
-  b: number;
-  c: number;
-  d: number;
-}
-
-export interface Callback<TReturn> {
-  (prng: PrngWithState<Arc4>, seed: string, is_math_call: true, state: object): TReturn;
-}
-
-export interface StateOption<T> {
-  state?: T | boolean;
-}
-export interface MathOptions extends StateOption<Arc4> {
-  entropy?: boolean;
-}
-export interface SeedrandomOptions extends MathOptions {
-  global?: boolean;
-  pass?: Callback<any>;
-}
-
+export const seedrandom: Seedrandom;
 export interface Seedrandom {
-  (seed?: any, options?: boolean): Prng;
-
-  <TOptions extends SeedrandomOptions>(
+  (seed?: any, options?: boolean): prng.Prng;
+  <TOptions extends option.Seedrandom>(
     seed: any,
     options: TOptions
-  ): Pick<TOptions, 'pass'> extends {pass: Callback<infer TReturn>} ? TReturn
-      : PropType<TOptions, 'global'> extends true ? string
-      : PropType<TOptions, 'state'> extends (Arc4 | true) ? PrngWithState<Arc4>
-      : Prng;
-
-  <TReturn, TOptions extends SeedrandomOptions>(
+  ): TOptions extends option.Pass<infer TReturn> ? TReturn
+      : TOptions extends option.Global ? string
+      : TOptions extends option.State<state.Arc4> ? prng.WithState<state.Arc4>
+      : prng.Prng;
+  <TOptions extends option.Seedrandom | boolean, TReturn>(
     seed: any,
-    options: TOptions | null | undefined,
+    options: TOptions,
     callback: Callback<TReturn>
-  ): Pick<TOptions, 'pass'> extends {pass: Callback<infer UReturn>} ? UReturn
+  ): TOptions extends option.Pass<infer TReturn> ? TReturn
       : TReturn;
 
-  alea: Alea;
-
-  xor128: Xor128;
-
-  xorwow: Xorwow;
-
-  xorshift7: Xorshift7;
-
-  xor4096: Xor4096;
-
-  tychei: Tychei;
+  alea: AlterMethod<state.Alea>;
+  xor128: AlterMethod<state.Xor128>;
+  xorwow: AlterMethod<state.Xorwow>;
+  xorshift7: AlterMethod<state.Xorshift7>;
+  xor4096: AlterMethod<state.Xor4096>;
+  tychei: AlterMethod<state.Tychei>;
 }
 
-export interface Alea {
-  (seed?: any): Prng;
-  (seed: any, opts?: StateOption<AleaXg> | boolean): PrngWithState<AleaXg>;
+export type Callback<TReturn> = (prng: prng.Union<state.Arc4>, seed: string) => TReturn;
+
+export interface AlterMethod<TState> {
+  (seed?: any): prng.Prng;
+  (seed: any, opts?: option.State<TState>): prng.WithState<TState>;
 }
 
-export interface Xor128 {
-  (seed?: any): Prng;
-  (seed: any, opts?: StateOption<Xor128Xg> | boolean): PrngWithState<Xor128Xg>;
+export namespace prng {
+  interface Prng {
+    int32(): number;
+    quick(): number;
+    double(): number;
+  }
+  interface WithState<TState> extends Prng {
+    state(): TState;
+  }
+  type Union<TState> = Prng | WithState<TState>;
 }
 
-export interface Xorwow {
-  (seed?: any): Prng;
-  (seed: any, opts?: StateOption<XorwowXg> | boolean): PrngWithState<XorwowXg>;
+export namespace state {
+  type State<Props extends string> = { [P in Props]: number; };
+  type StateWithArray<Props extends string, ArrayProps extends string> =
+    State<Props> & { [P in ArrayProps]: number[]; };
+
+  type Arc4 = StateWithArray<('i' | 'j'), ('S')>;
+  type Alea = State<('c' | 's0' | 's1' | 's2')>;
+  type Xor128 = State<('x' | 'y' | 'z' | 'w')>;
+  type Xorwow = State<('x' | 'y' | 'z' | 'w' | 'v' | 'd')>;
+  type Xorshift7 = StateWithArray<('i'), ('x')>;
+  type Xor4096 = StateWithArray<('i' | 'w'), ('X')>;
+  type Tychei = State<('a' | 'b' | 'c' | 'd')>;
 }
 
-export interface Xorshift7 {
-  (seed?: any): Prng;
-  (seed: any, opts?: StateOption<Xorshift7Xg> | boolean): PrngWithState<Xorshift7Xg>;
-}
+export namespace option {
+  interface Entropy { entropy: true; }
+  interface State<TState> { state: TState | true; }
+  interface Global { global: true; }
+  interface Pass<TReturn> { pass: Callback<TReturn>; }
 
-export interface Xor4096 {
-  (seed?: any): Prng;
-  (seed: any, opts?: StateOption<Xor4096Xg> | boolean): PrngWithState<Xor4096Xg>;
+  type Math = Partial<Entropy & State<state.Arc4>>;
+  type Seedrandom = Partial<Math & Global & Pass<any>>;
 }
-
-export interface Tychei {
-  (seed?: any): Prng;
-  (seed: any, opts?: StateOption<TycheiXg> | boolean): PrngWithState<TycheiXg>;
-}
-
-export const seedrandom: Seedrandom;
 
 declare global {
   interface Math {
-    seedrandom: (seed?: any, options?: MathOptions) => string;
+    seedrandom: (seed?: any, options?: option.Math) => string;
   }
 }
