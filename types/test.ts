@@ -1,4 +1,4 @@
-import { seedrandom, state, Callback } from 'seedrandom';
+import { seedrandom, state, Callback, prng } from 'seedrandom';
 
 const ARC4_STATE: state.Arc4 = { i: 0, j: 1, S: [2, 3, 4] };
 const ALEA_STATE: state.Alea = { c: 1, s0: 2, s1: 3, s2: 4 };
@@ -24,6 +24,7 @@ seedrandom('a', true); // $ExpectType Prng
 seedrandom('a', {}); // $ExpectType Prng
 seedrandom('a', {entropy: true}); // $ExpectType Prng
 seedrandom('a', {state: ARC4_STATE}); // $ExpectType WithState<StateWithArray<"i" | "j", "S">>
+seedrandom('a', {state: true}); // $ExpectType WithState<StateWithArray<"i" | "j", "S">>
 seedrandom('a', {entropy: true, state: ARC4_STATE}); // $ExpectType WithState<StateWithArray<"i" | "j", "S">>
 seedrandom('a', {entropy: true, state: true}); // $ExpectType WithState<StateWithArray<"i" | "j", "S">>
 seedrandom('a', {global: true}); // $ExpectType string
@@ -127,3 +128,11 @@ seedrandom.tychei('a'); // $ExpectType Prng
 // tychei(seed, opts)
 seedrandom.tychei('a', {state: TYCHEI_STATE}); // $ExpectType WithState<State<"a" | "c" | "d" | "b">>
 seedrandom.tychei('a', {state: true}); // $ExpectType WithState<State<"a" | "c" | "d" | "b">>
+
+// Prng
+const rng: prng.WithState<state.Arc4> = seedrandom('a', {state: true});
+rng(); // $ExpectType number
+rng.int32(); // $ExpectType number
+rng.quick(); // $ExpectType number
+rng.double(); // $ExpectType number
+rng.state(); // $ExpectType StateWithArray<"i" | "j", "S">

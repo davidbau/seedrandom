@@ -34,6 +34,7 @@ export interface AlterMethod<TState> {
 
 export namespace prng {
   interface Prng {
+    (): number;
     int32(): number;
     quick(): number;
     double(): number;
