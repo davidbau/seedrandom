@@ -3,6 +3,12 @@
   "version": "3.0.5",
   "description": "Seeded random number generator for Javascript.",
   "main": "index.js",
+  "files": [
+    "lib/*.js",
+    "index.js",
+    "seedrandom.js",
+    "seedrandom.min.js"
+  ],
   "jsdelivr": "seedrandom.min.js",
   "unpkg": "seedrandom.min.js",
   "keywords": [
