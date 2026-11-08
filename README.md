@@ -110,6 +110,13 @@ seedrandom to make a seed).
 instance.  `quick` is just the 32-bit version of the RC4-based PRNG
 originally packaged with seedrandom.)
 
+The `xorshift7` string-seed initialization now includes every character of
+the seed. Earlier versions ignored its first seven characters, causing all
+strings of seven characters or fewer to produce the same sequence. This fix
+can change sequences initialized from strings; 32-bit integer seeds
+and generators restored from saved state retain their sequences. The default
+`seedrandom` algorithm and the other alternative generators are unaffected.
+
 
 CJS / Node.js usage
 -------------------
